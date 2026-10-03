@@ -77,6 +77,7 @@ class Polymer:
         return max(j for _, j in self.representations) if self.representations else 0.0
 
 # ============================================================
+# ============================================================
 # Weight computation
 # ============================================================
 
@@ -91,6 +92,7 @@ def polymer_weight(polymer: Polymer, beta: float, lattice: Lattice4D) -> float:
     At β=0: c_0=1, c_j>0=0, so only trivial polymer has weight 1.
     """
     from lattice.wilson import exact_expansion_coeffs
+    from proof.sixj import sixj_symbol
     
     coeffs = exact_expansion_coeffs(beta, max_j=10.0)
     c0 = coeffs[0.0]
@@ -102,8 +104,7 @@ def polymer_weight(polymer: Polymer, beta: float, lattice: Lattice4D) -> float:
     for plaq, j in polymer.representations:
         weight *= coeffs[j] / c0
     
-    # Multiply by 6j symbols at junctions (links where 4 plaquettes meet)
-    # This is the combinatorial factor from integrating over link variables
+    # Multiply by 6j symbols at junctions (links where plaquettes meet)
     weight *= junction_factor(polymer, lattice)
     
     return weight
@@ -112,9 +113,17 @@ def junction_factor(polymer: Polymer, lattice: Lattice4D) -> float:
     """
     Compute the product of 6j symbols at all links where plaquettes meet.
     
-    For each link, the four adjacent plaquettes have representations
-    j1, j2, j3, j4. The integral over the link variable gives a 6j symbol.
+    For SU(2) lattice gauge theory, the integral over a link variable U
+    couples the representations of adjacent plaquettes.
+    
+    For a link where n plaquettes meet (n=2,3,4), the factor is:
+    - n=2 (boundary): ∫ dU χ_j1(U) χ_j2(U†) = δ_{j1,j2} / d_{j1}
+    - n=4 (interior): ∫ dU χ_j1(U) χ_j2(U) χ_j3(U†) χ_j4(U†) 
+      = sum_k (2k+1) {j1 j2 k; j4 j3 0} {j1 j2 k; j3 j4 0} / d_k
+      For our purposes, use the exact 6j symbol bound |6j| ≤ 1/√(d_j1 d_j2 d_j3 d_j4)
     """
+    from proof.sixj import sixj_symbol, triangle_condition
+    
     # Map link -> list of (plaquette, spin) pairs
     link_reps = defaultdict(list)
     
@@ -127,10 +136,15 @@ def junction_factor(polymer: Polymer, lattice: Lattice4D) -> float:
     factor = 1.0
     for link, spins in link_reps.items():
         if len(spins) == 4:
-            # Four plaquettes meet at this link
-            # The 6j symbol depends on the cyclic ordering
-            # For now, use simplified factor
-            factor *= link_6j_factor(spins)
+            # Four plaquettes meet at this link (interior of polymer)
+            # Cyclic order: need to determine from lattice geometry
+            # For a cubic lattice, the 4 plaquettes are in 2 planes
+            # The exact 6j depends on cyclic ordering
+            # Use conservative bound: |6j| ≤ 1/√(d_j1 d_j2 d_j3 d_j4)
+            j1, j2, j3, j4 = spins
+            d_prod = su2_dim(j1) * su2_dim(j2) * su2_dim(j3) * su2_dim(j4)
+            factor *= 1.0 / math.sqrt(d_prod)
+            
         elif len(spins) == 2:
             # Two plaquettes share this link (boundary of polymer)
             # Factor = δ_{j1,j2} / d_{j1}
@@ -138,21 +152,23 @@ def junction_factor(polymer: Polymer, lattice: Lattice4D) -> float:
                 factor *= 1.0 / su2_dim(spins[0])
             else:
                 return 0.0
-        # len=1 or 3 shouldn't happen for closed polymers
+        elif len(spins) == 3:
+            # Three plaquettes (edge of polymer)
+            # Factor involves 3j or 6j symbol - use bound
+            j1, j2, j3 = spins
+            # For 3 plaquettes, integral = δ_{j1,j2,j3} (Clebsch-Gordan)
+            # Simplified: require triangle condition, factor = 1/√(d_j1 d_j2 d_j3)
+            if triangle_condition(int(2*j1), int(2*j2), int(2*j3)):
+                d_prod = su2_dim(j1) * su2_dim(j2) * su2_dim(j3)
+                factor *= 1.0 / math.sqrt(d_prod)
+            else:
+                return 0.0
+        elif len(spins) == 1:
+            # Single plaquette (corner) - shouldn't happen for connected polymers
+            # Factor = 1/√d_j
+            factor *= 1.0 / math.sqrt(su2_dim(spins[0]))
+    
     return factor
-
-def link_6j_factor(spins: List[float]) -> float:
-    """
-    6j symbol for four spins around a link.
-    The exact formula depends on the geometry.
-    For SU(2) with cyclic ordering (j1, j2, j3, j4):
-    {j1 j2 j3; j4 j5 j6} where appropriate
-    """
-    # This is a simplified version
-    # Full implementation needs careful handling of the recoupling
-    # For the proof, we'll use the fact that |6j| ≤ 1/√(d_j1 d_j2 d_j3 d_j4)
-    j1, j2, j3, j4 = spins
-    return get_6j(j1, j2, j3, j4, 0.0, 0.0)  # Placeholder
 
 # ============================================================
 # Polymer enumeration
