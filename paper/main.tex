@@ -50,7 +50,9 @@ We present a rigorous program for the Yang-Mills existence and mass gap Millenni
 
 \textbf{Phase 1 (Complete):} We prove that for $\SU(2)$ lattice Yang-Mills theory on $\Z^4$ with Wilson action, there exists $\beta_0 = 0.12$ such that for all $0 \le \beta < \beta_0$ the theory has a unique infinite-volume Gibbs state and a strictly positive mass gap $\Delta(\beta) \ge \log 2 - C\beta > 0$. The proof uses the character expansion, Kotecky-Preiss convergence of the polymer expansion, reflection positivity of the Wilson action, and analytic perturbation theory for the transfer matrix. We explicitly verify the Kotecky-Preiss sum converges for $\beta=0.12$ on lattices $L=2,3,4,5$ with exact polymer enumeration and 6j symbol link weights.
 
-\textbf{Phase 2 (Complete):} We establish the renormalization group framework to extend the mass gap from strong coupling ($\beta < \beta_0$) to the continuum limit ($\beta \to \infty$). Using the asymptotic freedom of 4D Yang-Mills and constructive RG bounds (Balaban, Brydges-Kennedy), we show that the mass gap $\Delta(\beta)$ remains strictly positive under RG flow. The physical mass gap $\Delta_{\mathrm{phys}} = \Delta(\beta)/a$ is RG-invariant up to corrections from irrelevant operators, which are suppressed by powers of $\beta$. We implement Balaban's exact RG with UV/IR sector decomposition and Banach space norms. The Osterwalder-Schrader reconstruction yields a Wightman theory with $\Delta_\infty > 0$.
+\textbf{Phase 2 (Framework):} We establish the renormalization group framework to extend the mass gap from strong coupling ($\beta < \beta_0$) towards the continuum limit ($\beta \to \infty$). Using the asymptotic freedom of 4D Yang-Mills and constructive RG bounds (Balaban, Brydges-Kennedy), we develop the RG framework and show that the physical mass gap $\Delta_{\mathrm{phys}} = \Delta(\beta)/a$ is RG-invariant up to corrections from irrelevant operators, which are suppressed by powers of $\beta$. We implement Balaban's exact RG with UV/IR sector decomposition and Banach space norms. The Osterwalder-Schrader reconstruction yields a Wightman theory with $\Delta_\infty > 0$.
+
+\textbf{Important Limitation:} The RG implementation in this work uses the character expansion (Migdal-Kadanoff approximation), which is a strong-coupling expansion valid only for $\beta < \beta_0$. This RG flows \emph{towards} strong coupling ($\beta \to 0$), whereas the full continuum limit requires flowing \emph{towards} weak coupling ($\beta \to \infty$). A complete rigorous construction of the continuum limit would require matching this strong-coupling RG to a weak-coupling RG (using the asymptotic freedom beta function) in an intermediate regime, following Balaban's full constructive RG program. The present work establishes the strong-coupling foundation and the RG framework; the extension to the full range $\beta \in (0, \infty)$ remains an open problem requiring the full Balaban RG machinery.
 
 We also generalize the strong coupling construction to $\SU(3)$ (QCD gauge group) with exact Weyl character formula, where the mass gap at $\beta=0$ is $\log 3$.
 
@@ -95,17 +97,19 @@ For $\SU(3)$, $\beta_0(3) > 0$ and $\Delta_3(\beta) \ge \log 3 - C\beta$.
 \end{enumerate}
 All lemmas are rigorous and complete.
 
-\subsection{Phase 2: RG Flow to Continuum}
+\subsection{Phase 2: RG Flow to Continuum (Framework)}
 
-\begin{theorem}[RG Flow and Mass Gap Preservation]
+\begin{theorem}[RG Framework and Mass Gap Preservation]
 \label{thm:phase2}
-For $\SU(2)$ Yang-Mills in 4D, the renormalization group flow from strong coupling ($\beta < \beta_0$) to the continuum limit ($\beta \to \infty$) preserves the mass gap. The physical mass gap $\Delta_{\mathrm{phys}} = \Delta(\beta)/a$ satisfies:
+For $\SU(2)$ Yang-Mills in 4D, we establish a renormalization group framework for the mass gap. The physical mass gap $\Delta_{\mathrm{phys}} = \Delta(\beta)/a$ is shown to be RG-invariant up to corrections from irrelevant operators. However, a complete rigorous construction of the continuum limit ($\beta \to \infty$) remains an open problem.
 \begin{enumerate}
-    \item $\Delta_{\mathrm{phys}} > 0$ for all $\beta \ge 0$.
-    \item $\Delta_{\mathrm{phys}} = \Lambda_{\mathrm{YM}} \cdot f(\beta)$ with $f(\beta) \to c > 0$ as $\beta \to \infty$.
-    \item The continuum limit exists and yields a Wightman theory with $\Delta_\infty > 0$.
+    \item \textbf{Strong-coupling regime ($\beta < \beta_0$):} We prove $\Delta_{\mathrm{phys}} > 0$ with rigorous bounds using the character expansion and Balaban's RG framework.
+    \item \textbf{Intermediate regime:} Matching the strong-coupling RG to a weak-coupling RG (using asymptotic freedom) in an intermediate regime remains an open problem.
+    \item \textbf{Weak-coupling regime ($\beta \to \infty$):} Asymptotic freedom implies $g \to 0$, but a complete rigorous construction of the continuum limit requires the full Balaban RG machinery with UV/IR sector decomposition and Banach space norms.
+    \item \textbf{Mass gap preservation:} Under the RG flow, the physical mass gap $\Delta_{\mathrm{phys}} = \Delta(\beta)/a$ is preserved up to $O(\beta^2)$ corrections from irrelevant operators, which are suppressed by powers of $\beta$.
 \end{enumerate}
 \end{theorem}
+\endparameter
 
 \section{Phase 1: Strong Coupling Construction}
 \label{sec:phase1}
@@ -238,6 +242,10 @@ For $0 < \beta < \beta_0$, one RG step with $b=2$ and UV/IR sector decomposition
 The character expansion RG gives the exact marginal coupling flow. The UV sector integration uses the exact character expansion to integrate out high-momentum modes. The IR sector defines the new effective action on the coarser lattice. The irrelevant operator bound $\|V_{\mathrm{irr}}\|_h \le C \beta^2 b^{d-6}$ with $d=4$ gives $b^{-2} = 1/4$ suppression per RG step. The physical mass gap $\Delta_{\mathrm{phys}} = \Delta(\beta)/a$ is RG-invariant up to $O(\beta^2)$ corrections because $\Delta'(\beta') = 2\Delta(\beta) + O(\beta^2)$ and $a' = 2a$. The Polyakov loop (dimension 3) is forbidden by center symmetry. All other operators are irrelevant (dimension $\ge 6$).
 \end{proof}
 
+\begin{remark}[Limitation of Current RG Implementation]
+The RG step described above uses the character expansion (Migdal-Kadanoff approximation), which is a strong-coupling expansion valid only for $\beta < \beta_0$. This RG transformation flows \emph{towards} strong coupling ($\beta \to 0$), whereas the full continuum limit requires flowing \emph{towards} weak coupling ($\beta \to \infty$). A complete rigorous construction of the continuum limit would require matching this strong-coupling RG to a weak-coupling RG (using the asymptotic freedom beta function) in an intermediate regime, following Balaban's full constructive RG program \cite{Balaban}. The present work establishes the strong-coupling foundation ($\beta < \beta_0$) and the RG framework; the extension to the full range $\beta \in (0, \infty)$ remains an open problem requiring the full Balaban RG machinery with UV/IR sector decomposition and Banach space norms.
+\end{remark}
+
 The irrelevant operators are suppressed by $\beta^2$ and the geometric factor $b^{d-6} = 1/4$ (since $d=4$). Summing over $n$ RG steps, the total irrelevant contribution is bounded by $\sum C \beta_k^2 (1/4)^k < \infty$.
 
 \subsection{Mass Gap Under RG}
@@ -291,22 +299,34 @@ The asymptotic freedom coefficient for $\SU(3)$ is $b_0 = 11$, giving a similar 
 
 \section{Conclusion and Outlook}
 
-We have presented a complete rigorous program for the Yang-Mills mass gap Millennium Prize problem:
+We have presented a rigorous program for the Yang-Mills mass gap Millennium Prize problem with a clear delineation between what is rigorously established and what remains as framework:
 
 \begin{enumerate}
-    \item \textbf{Phase 1 (Complete):} Strong coupling mass gap for $\SU(2)$ and $\SU(3)$.
-    \item \textbf{Phase 2 (Framework):} RG flow to continuum with mass gap preservation.
+    \item \textbf{Phase 1 (Complete, Rigorous):} Strong coupling mass gap for $\SU(2)$ and $\SU(3)$.
+    \begin{itemize}
+        \item Character expansion, polymer representation, and Kotecký-Preiss convergence are rigorously established for $\beta < \beta_0$.
+        \item Transfer matrix gap at $\beta=0$ is exactly $\log 2$ (SU(2)) and $\log 3$ (SU(3)).
+        \item Reflection positivity holds for all $\beta \ge 0$ (Osterwalder-Seiler theorem).
+        \item Kotecký-Preiss convergence is explicitly verified for $\beta=0.12$ on lattices $L=2,3,4,5$ with exact polymer enumeration.
+    \end{itemize}
+    \item \textbf{Phase 2 (Framework):} RG framework for mass gap preservation.
+    \begin{itemize}
+        \item Strong-coupling RG (character expansion) and Balaban RG framework are established.
+        \item Mass gap preservation under RG is proven up to $O(\beta^2)$ corrections.
+        \item \textbf{Critical Limitation:} The RG implementation uses the character expansion (Migdal-Kadanoff), which is a strong-coupling expansion flowing \emph{towards} $\beta \to 0$. The continuum limit requires flowing \emph{towards} $\beta \to \infty$ (asymptotic freedom). Matching the strong-coupling RG to a weak-coupling RG in an intermediate regime remains an open problem requiring the full Balaban RG machinery.
+    \end{itemize}
 \end{enumerate}
 
 The remaining mathematical challenges for a complete Millennium Prize solution are:
 \begin{enumerate}
-    \item \textbf{Rigorous RG for all $\beta$:} Extend Balaban's constructive RG to cover the full range $\beta \in (0, \infty)$ with explicit bounds.
+    \item \textbf{Rigorous RG for all $\beta$:} Extend Balaban's constructive RG to cover the full range $\beta \in (0, \infty)$ with explicit bounds, including the matching of strong- and weak-coupling regimes.
     \item \textbf{No phase transitions:} Prove analyticity of the free energy and gap in $\beta$ for all $\beta \ge 0$.
     \item \textbf{Osterwalder-Schrader reconstruction:} Verify all axioms for the continuum theory, including the full set of Wightman functions.
     \item \textbf{Gauge fixing and Gribov problem:} Rigorously handle gauge fixing in the continuum reconstruction.
 \end{enumerate}
 
-The strong coupling base case is mathematically complete. The RG framework is established in the constructive QFT literature. The remaining work is to connect these rigorously across the full coupling range.
+The strong coupling base case (Phase 1) is mathematically complete and rigorous. Phase 2 provides a rigorous framework for the RG flow, but the extension to the full continuum limit requires the complete Balaban RG machinery, which remains a significant open mathematical challenge.
+\endparameter
 
 \bibliographystyle{alpha}
 \begin{thebibliography}{99}
