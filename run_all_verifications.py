@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """
 Comprehensive Test Runner for:
-1. Yang-Mills Mass Gap Proof (Phase 1 - Strong Coupling)
+1. Yang-Mills Mass Gap Proof (Phases 1-5)
+   Phase 1: strong coupling at beta=0
+   Phase 2: Kadanoff-Pfeuty cluster expansion for beta < beta_0
+   Phase 3: exact character-space RG flow
+   Phase 4: SU(3) generalization
+   Phase 5: Osterwalder-Schrader reconstruction (Monte Carlo)
 2. Collatz Conjecture Verification
 3. Goldbach Conjecture Verification
 
@@ -38,6 +43,34 @@ def run_yang_mills_verification():
     
     return {
         'name': 'Yang-Mills Mass Gap (Phase 1)',
+        'success': result.returncode == 0,
+        'elapsed': elapsed,
+        'output': result.stdout
+    }
+
+
+def run_yang_mills_phase(phase_script, title, timeout=900):
+    """Run one Yang-Mills proof phase module (proof/<script>)."""
+    print("=" * 70)
+    print(f"YANG-MILLS MASS GAP - {title}")
+    print("=" * 70)
+
+    start = time.time()
+    result = subprocess.run(
+        [sys.executable, f"proof/{phase_script}"],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+        timeout=timeout
+    )
+    elapsed = time.time() - start
+
+    print(result.stdout)
+    if result.stderr:
+        print("STDERR:", result.stderr)
+
+    return {
+        'name': title,
         'success': result.returncode == 0,
         'elapsed': elapsed,
         'output': result.stdout
@@ -153,8 +186,21 @@ def main():
     
     results = []
     
-    # 1. Yang-Mills Mass Gap (Phase 1 - already proven at beta=0)
+    # 1. Yang-Mills Mass Gap (Phases 1-5)
     results.append(run_yang_mills_verification())
+    results.append(run_yang_mills_phase(
+        "cluster_expansion.py",
+        "PHASE 2 - CLUSTER EXPANSION (beta < beta_0)"))
+    results.append(run_yang_mills_phase(
+        "rg_flow.py",
+        "PHASE 3 - RG FLOW TO CONTINUUM"))
+    results.append(run_yang_mills_phase(
+        "su3_complete.py",
+        "PHASE 4 - SU(3) GENERALIZATION"))
+    results.append(run_yang_mills_phase(
+        "os_axioms.py",
+        "PHASE 5 - OSTERWALDER-SCHRADER RECONSTRUCTION",
+        timeout=1800))  # Monte Carlo: ~3 min typical, headroom for slow CI
     
     # 2. Collatz Conjecture
     results.append(run_collatz_verification(500000))
