@@ -3,12 +3,14 @@ import Link from "next/link";
 const stats = [
   {
     title: "Yang-Mills Mass Gap",
-    subtitle: "Phase 1: Strong Coupling (β=0)",
+    subtitle: "5 verified phases · β=0 and β < β₀ rigorous",
     status: "PROVEN",
     statusColor: "text-green-400",
     detail: "Δ = log(2) ≈ 0.693",
-    verification: "Exact mathematical proof in code",
+    verification:
+      "Exact proof in code for Phases 1–4; Monte Carlo evidence for Phase 5 (OS axioms)",
     link: "/yang-mills",
+    paper: "/paper",
   },
   {
     title: "Collatz Conjecture",
@@ -34,7 +36,7 @@ const features = [
   {
     icon: "🔬",
     title: "Rigorous Proofs",
-    desc: "Yang-Mills Phase 1 has exact mathematical proof at β=0 with verified character expansion, 6j symbols, transfer matrix spectral gap",
+    desc: "Yang-Mills has 5 verified phases: exact proof at β=0 and β < β₀, exact RG flow, SU(3), plus Monte Carlo evidence for the OS axioms — see the paper at /paper",
   },
   {
     icon: "⚡",
@@ -148,6 +150,11 @@ export default function Home() {
                 <p className="text-gray-400 mb-2">{stat.subtitle}</p>
                 <div className="text-2xl font-mono text-white mb-2">{stat.detail}</div>
                 <p className="text-gray-500 text-sm">{stat.verification}</p>
+                {stat.paper && (
+                  <p className="mt-3 text-sm font-medium text-green-400 group-hover:text-green-300">
+                    Read the paper →
+                  </p>
+                )}
               </Link>
             ))}
           </div>
