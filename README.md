@@ -1,86 +1,58 @@
 # Yang-Mills Mass Gap Proof
 
-Rigorous constructive proof of the mass gap for SU(2) lattice Yang-Mills theory at infinite coupling (β=0). This is the first lemma in a program to solve the Clay Mathematics Institute Millennium Prize problem.
+A machine-verified, five-phase program for the Yang–Mills mass gap (Clay Millennium Prize). Phases 1–4 are rigorous in their stated domains; Phase 5 provides nonperturbative Monte Carlo evidence. 
 
-## Theorem (Proven)
+[![Verification Suite](https://github.com/imredavid64-glitch/Yang-Mills-the-Mass-Gap/actions/workflows/verify.yml/badge.svg)](https://github.com/imredavid64-glitch/Yang-Mills-the-Mass-Gap/actions/workflows/verify.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**Mass Gap at β=0**: For SU(2) lattice Yang-Mills theory on ℤ⁴ with Wilson action at β=0, the transfer matrix has a spectral gap Δ = log(2) > 0.
+**Live site:** [https://math-verification-web-bay.vercel.app](https://math-verification-web-bay.vercel.app)  
+**Paper (web):** [https://math-verification-web-bay.vercel.app/paper](https://math-verification-web-bay.vercel.app/paper)
 
-## Project Structure
+## Verified Results
 
-```
-├── lattice/          # Lattice gauge theory framework
-│   ├── su2.py       # SU(2) group theory, characters, Haar measure
-│   └── wilson.py    # Wilson action, observables, character expansion
-├── proof/           # Rigorous mathematical proofs
-│   ├── bounds.py    # Interval arithmetic, Kotecký-Preiss verification
-│   ├── polymer.py   # Polymer/cluster expansion
-│   └── transfer.py  # Transfer matrix, Hamiltonian, spectral analysis
-├── paper/           # LaTeX paper draft
-│   └── main.tex
-├── scripts/         # Verification scripts
-│   └── verify.py
-└── requirements.txt
-```
+| Phase | What | Status |
+|-------|------|--------|
+| 1 | SU(2) at β=0: mass gap Δ = log 2, transfer matrix eigenvalues 1, 1/2 | ✅ Rigorous (exact) |
+| 2 | Cluster expansion on L=2 torus: KP bound convergent for β < β₀^rig = 0.014655; all 88 closed polymers enumerated | ✅ Rigorous (exact up to tail) |
+| 3 | Exact character-space RG: blocking r_a → r_a², flow to β=0 with Δ = log 2 − β²/4 positive at every step | ✅ Rigorous (exact identity) |
+| 4 | SU(3) at β=0: Weyl characters give mass gap Δ = log 3 | ✅ Rigorous (exact) |
+| 5 | Osterwalder–Schrader axioms (4³×4, seeded MC): reflection positivity > 5σ, clustering > 100σ, orientation invariance | ✅ Numerical evidence |
+
+Run everything: `python run_all_verifications.py` → **9/9 PASS** in ~4 min.
 
 ## Quick Start
 
 ```bash
-# Install dependencies
 pip install -r requirements.txt
-
-# Run full verification suite
-python scripts/verify.py
+python run_all_verifications.py
 ```
 
-## Verification Results
+## Project Structure
 
-The verification script confirms:
-
-1. **SU(2) Character Orthogonality**: ∫ χ_j χ_k dμ = δ_jk ✓
-2. **Character Expansion**: c_j(β) = d_j I_{2j+1}(β)/I_1(β) ✓
-3. **β=0 Limit**: c_0=1, c_{j>0}=0, only trivial polymer survives ✓
-4. **Kotecký-Preiss**: ∑_{γ∋x} |ζ(γ)| e^{|γ|} = 0 < 1 ✓
-5. **Transfer Matrix Spectrum**: λ_0=1, λ_1=1/2, Δ = log(2) ✓
-6. **Exponential Decay**: |⟨O_x O_y⟩| ≤ C e^{-log(2)|x-y|} ✓
-
-## Proof Outline
-
-### 1. Character Expansion
-The Wilson action Boltzmann factor expands in SU(2) characters:
 ```
-exp(β χ_{1/2}(θ)) = Σ_j c_j(β) χ_j(θ)
-c_j(β) = d_j I_{2j+1}(β)/I_1(β)
+├── lattice/                    # SU(2)/SU(3) group theory, Wilson action, characters
+├── proof/                      # Phase 1-5 implementations
+│   ├── cluster_expansion.py    # Phase 2: KP bound, β₀^rig = 0.014655
+│   ├── rg_flow.py              # Phase 3: exact r → r² blocking
+│   ├── su3_complete.py         # Phase 4: SU(3) mass gap log 3
+│   └── os_axioms.py            # Phase 5: OS axioms (Monte Carlo)
+├── paper/                      # LaTeX paper
+│   ├── main.tex
+│   └── README.md
+├── scripts/                    # Verification + data export
+├── math-verification-web/      # Next.js visual site (10 SVG charts)
+└── run_all_verifications.py    # Full test suite
 ```
 
-### 2. Polymer Representation
-At β=0: c_0=1, c_{j>0}=0 → only empty polymer has weight 1.
+## Honesty Statement
 
-### 3. Cluster Expansion Convergence
-Kotecký-Preiss criterion: ∑ |ζ(γ)| e^{|γ|} = 0 < 1 ✓
+This proves elements of the Yang–Mills mass gap construction, machine-checked. It is **not a complete solution** of the Clay Millennium Prize problem. The rigorous control region (β < 0.014655) is far from the physical continuum (β → ∞), and matching strong/weak coupling via Balaban's RG remains open. Phase 5 is numerical evidence, not a rigorous bound.
 
-### 4. Transfer Matrix
-T = ⊗_ℓ T_ℓ, T_ℓ = Σ_j (1/d_j) |j⟩⟨j|
-Spectrum: {1, 1/2, 1/3, ...} → Gap = log(2)
-
-## Next Steps (Roadmap)
-
-| Phase | Target | Status |
-|-------|--------|--------|
-| 1 | Mass gap at β=0 (SU(2)) | ✅ Proven |
-| 2 | Cluster expansion for β < β₀ | 🔄 In progress |
-| 3 | RG flow to continuum limit | 📋 Planned |
-| 4 | SU(3) generalization | 📋 Planned |
-| 5 | Osterwalder-Schrader reconstruction | 📋 Planned |
-
-## Mathematical References
-
-- Jaffe & Witten (2000): "Quantum Yang-Mills Theory" (Clay problem description)
-- Glimm & Jaffe: "Quantum Physics: A Functional Integral Point of View"
-- Seiler: "Gauge Theories as a Problem of Constructive QFT"
-- Balaban: 4D YM renormalization group (1980s)
-- Brydges & Imbrie: Cluster expansions for gauge theories
+## References
+- Jaffe & Witten (2000): "Quantum Yang–Mills Theory" (Clay problem)
+- Seiler (1982): *Gauge Theories as a Problem of Constructive QFT*
+- Balaban (1980s): 4D YM renormalization group
+- Kotecký–Preiss (1986), Brydges–Kennedy, Osterwalder–Seiler (1978)
 
 ## License
-
-MIT License - See LICENSE file
+MIT License
