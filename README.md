@@ -2,11 +2,14 @@
 
 A machine-verified, five-phase program for the Yang–Mills mass gap (Clay Millennium Prize). Phases 1–4 are rigorous in their stated domains; Phase 5 provides nonperturbative Monte Carlo evidence. 
 
+![Yang-Mills Mass Gap — 5 phases visualized](docs/ym-preview.png)
+
 [![Verification Suite](https://github.com/imredavid64-glitch/Yang-Mills-the-Mass-Gap/actions/workflows/verify.yml/badge.svg)](https://github.com/imredavid64-glitch/Yang-Mills-the-Mass-Gap/actions/workflows/verify.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**Live site:** [https://math-verification-web-bay.vercel.app](https://math-verification-web-bay.vercel.app)  
-**Paper (web):** [https://math-verification-web-bay.vercel.app/paper](https://math-verification-web-bay.vercel.app/paper)
+**Live demo:** [math-verification-web-bay.vercel.app](https://math-verification-web-bay.vercel.app)  
+**Interactive paper:** [math-verification-web-bay.vercel.app/paper](https://math-verification-web-bay.vercel.app/paper)  
+**LaTeX source:** [`paper/main.tex`](paper/main.tex)
 
 ## Verified Results
 
