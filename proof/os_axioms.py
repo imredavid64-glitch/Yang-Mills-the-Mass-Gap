@@ -1,4 +1,10 @@
 """
+AUDIT NOTICE (2026-11-27)
+Reflection positivity of the Wilson action is a classical theorem; these Monte
+Carlo checks are sanity checks on a 4^4 lattice at beta = 1, 2.  At beta = 1 the
+measured clustering is at noise level (C(1) ~ 0).  Nothing here concerns the
+continuum limit.
+
 Phase 5 — Osterwalder-Schrader reconstruction via Monte Carlo.
 
 Nonperturbative check of the OS axioms for the SU(2) Wilson lattice gauge

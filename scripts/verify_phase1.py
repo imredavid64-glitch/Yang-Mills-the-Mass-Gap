@@ -86,8 +86,8 @@ def run_all():
     
     print("\n" + "=" * 60)
     print("ALL PHASE 1 VERIFICATIONS PASSED")
-    print("Theorem proven: Strong coupling mass gap for SU(2)")
-    print("Ready for Phase 2: Renormalization group to continuum limit")
+    print("NOTE: the log(2) gap check above is circular; see proof/transfer_beta_zero.py")
+    print("See proof/finner_kp.py for the corrected infinite-volume strong-coupling bound")
     print("=" * 60)
     return True
 

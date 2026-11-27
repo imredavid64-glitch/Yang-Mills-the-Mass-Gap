@@ -1,6 +1,6 @@
 # Yang-Mills Mass Gap Proof
 
-A machine-verified, five-phase program for the Yang–Mills mass gap (Clay Millennium Prize). Phases 1–4 are rigorous in their stated domains; Phase 5 provides nonperturbative Monte Carlo evidence. 
+A five-phase **exploratory** program around the Yang–Mills mass gap (Clay Millennium problem), with an audit of what its scripts do and do not show. **The Clay problem is not solved or advanced here.** See "Audit status" below.
 
 ![Yang-Mills Mass Gap — 5 phases visualized](docs/ym-preview.png)
 
@@ -11,17 +11,22 @@ A machine-verified, five-phase program for the Yang–Mills mass gap (Clay Mille
 **Interactive paper:** [math-verification-web-bay.vercel.app/paper](https://math-verification-web-bay.vercel.app/paper)  
 **LaTeX source:** [`paper/main.tex`](paper/main.tex)
 
-## Verified Results
+## Audit status (2026-11-27)
 
-| Phase | What | Status |
-|-------|------|--------|
-| 1 | SU(2) at β=0: mass gap Δ = log 2, transfer matrix eigenvalues 1, 1/2 | ✅ Rigorous (exact) |
-| 2 | Cluster expansion on L=2 torus: KP bound convergent for β < β₀^rig = 0.014655; all 88 closed polymers enumerated | ✅ Rigorous (exact up to tail) |
-| 3 | Exact character-space RG: blocking r_a → r_a², flow to β=0 with Δ = log 2 − β²/4 positive at every step | ✅ Rigorous (exact identity) |
-| 4 | SU(3) at β=0: Weyl characters give mass gap Δ = log 3 | ✅ Rigorous (exact) |
-| 5 | Osterwalder–Schrader axioms (4³×4, seeded MC): reflection positivity > 5σ, clustering > 100σ, orientation invariance | ✅ Numerical evidence |
+"Pass" below means the script's own assertions hold. It does not mean the claimed mathematics is established.
 
-Run everything: `python run_all_verifications.py` → **9/9 PASS** in ~4 min.
+| Phase | Original claim | What is actually shown |
+|-------|----------------|------------------------|
+| 1 | SU(2), β=0: Δ = log 2 | **Not shown.** `log 2` is hard-coded in `proof/transfer.py` and compared to a hand-built spectrum. At β=0 connected correlators vanish, so the lattice gap is formally infinite; the leading strong-coupling rate is ≈ 4 ln(4/β) (heuristic; see `proof/transfer_beta_zero.py`). |
+| 2 | KP convergence for β < 0.014655 (L=2 torus) | **Weights wrong.** `∏ I(k_l)` is not `∫∏Tr U_p dU` (cube: exact 2⁻⁴, code 1; `proof/exact_weights.py`, `proof/WEIGHT_ERROR.md`). The old bound is carried by the Eden tail, not the enumeration. |
+| 2′ | — (new) | **Infinite-volume strong-coupling convergence for β < 0.0183**, all representations, correct weights, via Finner's inequality + Kotecký–Preiss (`proof/finner_kp.py`). Relies on cited theorems (Finner; animal-count bound; KP) and gives a gap lower bound δ*(β), e.g. ≥ 1.30 at β=0.005. Classical strong-coupling regime (Osterwalder–Seiler 1978). |
+| 3 | Exact RG flow `r → r²` | **Not a 4D RG.** It is decimation of a 1-D link chain; it maps any r<1 to 0, so "flow to β=0" is automatic and the wrong direction for a continuum limit. |
+| 4 | SU(3): Δ = log 3 | Group theory (dimensions, Weyl characters, Haar measure) checks numerically. The `log 3` "gap" has the same problem as Phase 1. |
+| 5 | OS axioms by Monte Carlo | Sanity checks on a 4⁴ lattice at β=1, 2. Reflection positivity of the Wilson action is a classical theorem; at β=1 the measured clustering is at noise level. |
+
+Collatz/Goldbach scripts are finite computational checks (up to 5·10⁵ / 10⁵), not proofs.
+
+Run everything: `python run_all_verifications.py` (Phase 5 takes a few minutes).
 
 ## Quick Start
 
@@ -35,7 +40,9 @@ python run_all_verifications.py
 ```
 ├── lattice/                    # SU(2)/SU(3) group theory, Wilson action, characters
 ├── proof/                      # Phase 1-5 implementations
-│   ├── cluster_expansion.py    # Phase 2: KP bound, β₀^rig = 0.014655
+│   ├── exact_weights.py        # exact Haar polymer integrals (tensor contraction)
+│   ├── finner_kp.py            # infinite-volume strong-coupling bound, β < 0.0183
+│   ├── cluster_expansion.py    # Phase 2 (old torus bound; weights flawed, see audit)
 │   ├── rg_flow.py              # Phase 3: exact r → r² blocking
 │   ├── su3_complete.py         # Phase 4: SU(3) mass gap log 3
 │   └── os_axioms.py            # Phase 5: OS axioms (Monte Carlo)
@@ -49,7 +56,7 @@ python run_all_verifications.py
 
 ## Honesty Statement
 
-This proves elements of the Yang–Mills mass gap construction, machine-checked. It is **not a complete solution** of the Clay Millennium Prize problem. The rigorous control region (β < 0.014655) is far from the physical continuum (β → ∞), and matching strong/weak coupling via Balaban's RG remains open. Phase 5 is numerical evidence, not a rigorous bound.
+What is defensible here is classical strong-coupling clustering at fixed lattice spacing for β < 0.0183 (`proof/finner_kp.py`, conditional on the cited theorems). The continuum limit (β → ∞), infinite-volume OS reconstruction in 4D, and the existence of a mass gap in the continuum theory are open and are not addressed. Balaban's program is a multi-paper effort that is not reimplemented here.
 
 ## References
 - Jaffe & Witten (2000): "Quantum Yang–Mills Theory" (Clay problem)

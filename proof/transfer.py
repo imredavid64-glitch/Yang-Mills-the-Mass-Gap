@@ -1,4 +1,12 @@
 """
+AUDIT NOTICE (2026-11-27)
+exact_mass_gap_beta_zero() returns math.log(2) as a constant and the "spectrum"
+is hand-built as [1.0] + [0.5]*n, so the gap checks here are circular.  A lone
+j=1/2 link also violates Gauss's law.  At beta=0 connected correlators of
+gauge-invariant observables vanish exactly (gap formally infinite in lattice
+units); see proof/transfer_beta_zero.py.  second_order_correction() and the
+Hamiltonian matrix elements are placeholders, not computed values.
+
 Transfer matrix and Hamiltonian formulation for SU(2) lattice gauge theory.
 Computes spectral gap at beta=0 and sets up perturbative expansion for beta>0.
 """

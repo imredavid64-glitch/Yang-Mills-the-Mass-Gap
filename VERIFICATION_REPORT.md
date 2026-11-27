@@ -1,3 +1,17 @@
+# STATUS NOTICE (2026-11-27)
+
+An audit of this repository found that the "rigorous" / "machine-verified" labels
+below overstate what is shown.  Passing scripts means the scripts' own assertions
+hold, not that the mathematics is correct.  In particular: the Phase 1 gap
+`log 2` is hard-coded; the Phase 2 polymer weights are not the Haar integrals
+(`proof/WEIGHT_ERROR.md`); Phase 3 is decimation of a 1-D chain, not a 4-D RG;
+Phase 5 is a small-lattice sanity check.  The corrected, defensible statement is
+classical strong-coupling clustering at fixed lattice spacing
+(`proof/finner_kp.py`).  The Clay problem is not addressed.  The text below is
+kept unchanged for history.
+
+---
+
 # Mathematical Verification Suite - Summary Report
 
 **Date:** October 19, 2026  

@@ -1,4 +1,10 @@
 """
+AUDIT NOTICE (2026-11-27)
+r -> r^2 is exact decimation of a one-dimensional chain of links; it is not a
+blocking map for 4D lattice gauge theory.  Iterating it sends every r < 1 to 0,
+so "flow to beta = 0" is automatic and points the wrong way for a continuum
+limit.  Delta(beta) = log 2 - beta^2/4 is hard-coded and unsourced here.
+
 Phase 3 — Exact character-space RG flow for SU(2) lattice gauge theory.
 
 The exact Mack-type blocking transformation.  A coarse link is the product
