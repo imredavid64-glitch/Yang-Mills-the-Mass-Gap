@@ -38,10 +38,10 @@ const proofSteps = [
   },
   {
     number: 4,
-    title: "Transfer Matrix at β=0",
+    title: "Transfer Matrix at β=0 (caution)",
     detail:
-      "T = ⊗_ℓ T_ℓ, where T_ℓ = Σⱼ (1/dⱼ) |j⟩⟨j|\nEigenvalues: products of 1/dⱼ\nGround state (all j=0): λ₀ = 1\nFirst excited (one j=1/2): λ₁ = 1/2\nMass gap: Δ = -log(λ₁/λ₀) = log(2)",
-    verified: true,
+      "T = ⊗_ℓ T_ℓ, where T_ℓ = Σⱼ (1/dⱼ) |j⟩⟨j| — exact algebra.\nBut Δ = log(2) is hard-coded in proof/transfer.py, not derived from a spectrum;\nsee proof/transfer_beta_zero.py.",
+    verified: false,
   },
   {
     number: 5,
@@ -77,12 +77,12 @@ const exactResults = [
   {
     label: "Mass Gap Δ",
     value: "log(2) ≈ 0.693",
-    description: "Exact spectral gap",
+    description: "Hard-coded in proof/transfer.py, not derived (caution)",
   },
   {
     label: "String Tension",
     value: "log(2)",
-    description: "Fundamental representation",
+    description: "Fundamental representation ratio, cited not derived",
   },
   {
     label: "SU(3) Gap at β=0",
@@ -99,9 +99,14 @@ const phase2Results = [
       "24 planar four-cycles at ζ = r⁴ plus 64 six-cycles; odd sizes vanish identically",
   },
   {
-    label: "β₀ʳⁱᵍ (bisection root)",
+    label: "β₀ʳⁱᵍ (torus-only, superseded)",
     value: "0.0145206",
-    description: "Smallest β with A(β) + tail(6, β) = 0.996710, still below 1",
+    description: "KP bound on L=2 torus with incorrect weights (see proof/exact_weights.py)",
+  },
+  {
+    label: "Correct-weight bound (certified)",
+    value: "β ≤ 0.0167",
+    description: "Interval-arithmetic certificate, μ ≥ 0.0063 (proof/rigorous_check.py)",
   },
   {
     label: "Lattice",
@@ -112,18 +117,18 @@ const phase2Results = [
   },
   {
     label: "Gap bound at β₀/2",
-    value: "≥ 8.14",
-    description: "Δ(β) ≥ −log(A + tail), comfortably positive",
+    value: "superseded",
+    description: "Incorrect weights; see proof/WEIGHT_ERROR.md",
   },
   {
     label: "Gap bound at β₀",
-    value: `≥ ${phase2.gapBound.gap[phase2.gapBound.gap.length - 1].toFixed(3)}`,
-    description: "Still > 0 at the very edge of the controlled domain",
+    value: "superseded",
+    description: "Certified bound is μ ≥ 0.0063 at β = 0.0167",
   },
   {
     label: "Analytic gap Δ(β)",
     value: "log 2 − β²/4",
-    description: "Balian et al. strong-coupling estimate, ≈ 0.693",
+    description: "Cited asymptote, not derived",
   },
   {
     label: "Literature domain",
@@ -181,19 +186,19 @@ const phase5Axioms = [
 const roadmap = [
   {
     phase: "1",
-    accent: "text-green-400",
-    target: "Mass gap at β=0 (SU(2))",
-    badge: "✅ Proven",
-    badgeClass: "bg-green-900/50 text-green-400",
-    note: "Exact character expansion, polymer weights, KP sum and transfer eigenvalues; Δ = log 2.",
+    accent: "text-yellow-400",
+    target: "β=0 exact algebra",
+    badge: "⚠ Caution",
+    badgeClass: "bg-yellow-900/50 text-yellow-400",
+    note: "Transfer algebra exact; Δ = log 2 hard-coded in code, not derived (proof/transfer_beta_zero.py).",
   },
   {
     phase: "2",
-    accent: "text-green-400",
-    target: "Cluster expansion for β < β₀",
-    badge: "✅ Proven (β < 0.0145)",
-    badgeClass: "bg-green-900/50 text-green-400",
-    note: "Rigorous KP bound on the L=2 torus; literature estimates reach β ≈ 0.12, so ours is conservative but machine-verified.",
+    accent: "text-yellow-400",
+    target: "Torus-only KP bound (β < 0.0145)",
+    badge: "⚠ Caution",
+    badgeClass: "bg-yellow-900/50 text-yellow-400",
+    note: "Incorrect polymer weights on L=2 torus; correct-weight infinite-volume bound β ≤ 0.0167, μ ≥ 0.0063 certified (proof/rigorous_check.py).",
   },
   {
     phase: "3",
@@ -201,20 +206,20 @@ const roadmap = [
     target: "Exact RG flow (strong coupling)",
     badge: "✅ Verified exact",
     badgeClass: "bg-blue-900/50 text-blue-400",
-    note: "Exact blocking r → r²; flow to β = 0 with a positive mass gap at every step. Continuum matching remains open.",
+    note: "Exact blocking r → r²; not a 4-D RG (proof/rg_flow.py).",
   },
   {
     phase: "4",
-    accent: "text-green-400",
+    accent: "text-yellow-400",
     target: "SU(3) generalization",
-    badge: "✅ Proven at β=0",
-    badgeClass: "bg-green-900/50 text-green-400",
-    note: "Weyl determinant characters; exact mass gap log 3 ≈ 1.0986.",
+    badge: "⚠ Caution",
+    badgeClass: "bg-yellow-900/50 text-yellow-400",
+    note: "SU(3) group theory checks; gap log 3 is a cited ratio, not derived.",
   },
   {
     phase: "5",
     accent: "text-purple-400",
-    target: "Osterwalder-Schrader reconstruction",
+    target: "OS axioms",
     badge: "◻ Verified by Monte Carlo",
     badgeClass: "bg-purple-900/50 text-purple-400",
     note: "Reflection positivity (>5σ) and exponential clustering at β = 1.0, 2.0 — numerical evidence, not a rigorous bound.",
@@ -560,7 +565,7 @@ export default function YangMillsPage() {
               tail for every polymer larger than the enumerated size 6 and you
               get a strict bound rather than a truncation. The largest β for
               which the total still fits under 1 is{" "}
-              <span className="font-mono text-green-400">β₀ʳⁱᵍ = 0.0145206</span>
+              <span className="font-mono text-green-400">β* = 0.0167 (certified, interval arithmetic)</span>
               .
             </p>
           </div>
@@ -727,7 +732,7 @@ export default function YangMillsPage() {
               The first excitation is a single link in a fundamental of dimension
               3, so the exact gap for the QCD gauge group is{" "}
               <span className="font-mono text-green-400">
-                Δ_SU(3) = log 3 ≈ 1.0986123
+                Δ_SU(3) = log 3 (cited, not derived) — cited ratio, not derived ≈ 1.0986123
               </span>
               . The character table is built with the Weyl determinant formula
               and checked by{" "}

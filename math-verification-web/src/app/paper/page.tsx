@@ -411,71 +411,79 @@ export default function PaperPage() {
           <h2 className="text-2xl font-bold text-white mb-4">Abstract</h2>
           <div className="space-y-4 rounded-xl border border-gray-800 bg-gray-900 p-6 text-gray-300 leading-relaxed">
             <p>
-              We present a machine-verified, five-phase program for the
-              Yang–Mills existence and mass gap Millennium Prize problem,
-              implemented and checked in exact arithmetic (Phases 1–4) and by
-              deterministic Monte Carlo (Phase 5). The five phases and their
-              proved statements are:
+              We present a five-phase exploratory program around the Yang–Mills
+              existence and mass gap Millennium Prize problem, implemented and
+              checked in exact arithmetic (Phases 1–4) and by deterministic
+              Monte Carlo (Phase 5). <strong className="text-yellow-300">
+              Audit status (2026-11-27):</strong> the labels below describe what
+              the scripts show, not what the mathematics establishes. Passing a
+              script means the script's own assertions hold; it does not prove
+              the claimed theorem.
             </p>
             <p>
               <strong className="text-white">
-                Phase 1 (rigorous, exact).
+                Phase 1 (caution: circular check).
               </strong>{" "}
-              For SU(2) lattice Yang–Mills theory on ℤ⁴ with Wilson action at β
-              = 0, the transfer matrix has spectral gap Δ = log 2 {">"} 0; all
-              polymer weights vanish identically, the Kotecký–Preiss sum is 0
-              {" < "}1, and the transfer eigenvalues are λ₀ = 1, λ₁ = ½.
+              For SU(2) lattice Yang–Mills theory on ℤ⁴ with Wilson action at
+              β = 0, connected correlators of gauge-invariant observables vanish
+              exactly, so the lattice gap is formally infinite. The file
+              proof/transfer.py hard-codes Δ = log 2 (cited, not derived) and compares it against a
+              hand-built spectrum [1.0, 0.5, …], which is not a derivation; see
+              proof/transfer_beta_zero.py.
             </p>
             <p>
               <strong className="text-white">
-                Phase 2 (rigorous, exact up to a rigorous tail).
+                Phase 2 (caution: weights wrong).
               </strong>{" "}
-              On the L = 2 torus (16 sites, 64 links, 96 plaquettes) the polymer
-              expansion built from the fundamental character r_(1/2)(β) = 2
-              I₂(β)/I₁(β) converges absolutely by the Kadanoff–Pfeuty/Kotecký–Preiss
-              criterion for all β {"<"} β₀ʳⁱᵍ = 0.0145206, with the mass-gap
-              bound Δ(β) ≥ −log(A(β) + tail(β)) {">"} 0 throughout; in particular
-              Δ ≥ 8.14 at β = β₀/2. All 88 closed polymers (24 planar
-              four-cycles, 64 six-cycles) are enumerated exactly.
+              On the L = 2 torus, the polymer expansion uses weights
+              ζ(γ) = ∏ₗ I(kₗ) with Catalan numbers. The exact Haar integral of
+              ∏ₚ Tr(Uₚ) differs — e.g. the elementary cube has exact value 2⁻⁴,
+              not 1 (see proof/exact_weights.py and proof/WEIGHT_ERROR.md). The
+              torus-only bound β₀ʳⁱᵍ = 0.0145206 is dominated by the Eden tail
+              (A ≈ 0, tail ≈ 0.99), not by the enumeration. An infinite-volume
+              strong-coupling bound with correct weights is in
+              proof/finner_kp.py and is certified in proof/rigorous_check.py:
+              β ≤ 0.0167, certified decay rate μ ≥ 0.0063 there.
             </p>
             <p>
               <strong className="text-white">
-                Phase 3 (rigorous, exact identity).
+                Phase 3 (caution: not a 4-D RG).
               </strong>{" "}
-              The exact Mack-type blocking transformation for a two-link chain
-              squares the normalized character couplings, r_a → r_a², with exact
-              inverse (split) r_a → √r_a; the induced flow on the effective
-              coupling satisfies β′/β² → ½ in strong coupling, drives β → 0, and
-              keeps the mass gap Δ(β) = log 2 − β²/4 strictly positive and
-              monotone along every trajectory.
+              r_a → r_a² is exact decimation of a one-dimensional link chain,
+              not a blocking map for four-dimensional lattice gauge theory.
+              Iterating it sends every r {"<"} 1 to 0 automatically, so the
+              claimed “flow to β = 0” and Δ(β) = log 2 − β²/4 point away
+              from the continuum limit (see proof/rg_flow.py).
             </p>
             <p>
               <strong className="text-white">
-                Phase 4 (rigorous, exact).
+                Phase 4 (caution: not a derived gap).
               </strong>{" "}
-              For SU(3) at β = 0 the same construction with Weyl-determinant
-              characters gives the exact mass gap Δ_SU(3) = log 3.
+              The SU(3) group theory (dimensions, Weyl characters, Haar measure,
+              orthogonality) checks numerically, but "mass gap log 3" is a
+              single-link eigenvalue ratio 1/d₃, not a derived Wilson-action gap
+              (see proof/su3_complete.py and proof/transfer_beta_zero.py).
             </p>
             <p>
               <strong className="text-white">
-                Phase 5 (numerical, deterministic).
+                Phase 5 (numerical, small lattice).
               </strong>{" "}
-              The Osterwalder–Schrader reflection-positivity, clustering, and
-              orientation-invariance axioms are verified on a 4³ × 4 lattice by
-              a seeded Monte Carlo run (3000 measurements, seed 20261018): no OS
-              form is negative at 5σ, 33 of 35 forms are detected positive at
-              5σ, clustering is significant at {">"}100σ, and the mean plaquette
-              matches the strong-coupling form β/4.
+              OS axioms checked on a 4³ × 4 lattice by seeded Monte Carlo
+              (3000 measurements, seed 20261018): no OS form is negative at 5σ,
+              clustering is at noise level at β = 1. Reflection positivity of
+              the Wilson action is a classical theorem; this is a sanity check,
+              not a proof of anything about the continuum.
             </p>
             <p>
-              <strong className="text-white">Scope.</strong> Phases 1–4 are
-              rigorous statements with machine-verified computations; Phase 5 is
-              numerical evidence. The analytically controlled region β {"<"}{" "}
-              0.0145 lies far from the physical continuum regime, and the
+              <strong className="text-white">Scope.</strong> Of the phases
+              above, only the correct-weight strong-coupling result (§4.4) is
+              established, and it is conditional on the cited results listed in
+              proof/THEOREM.md; the others are circular, mislabelled or
+              numerical. The analytically controlled region β {"<"}{" "}
+              0.0167 lies far from the physical continuum regime, and the
               matching of the strong-coupling RG to a weak-coupling
-              (asymptotically free) RG remains open. This work is an open,
-              reproducible program of verified elements,{" "}
-              <em>not</em> a complete solution of the Millennium problem. All
+              (asymptotically free) RG remains open. This work is{" "}
+              <em>not</em> a solution of the Millennium problem. All
               code, data, and an interactive visual exposition are at the
               repository URL above.
             </p>
@@ -510,33 +518,28 @@ export default function PaperPage() {
             <ul className="list-disc list-inside space-y-2 ml-2">
               <li>
                 <strong className="text-white">Phase 1</strong> (§3): the exact β
-                = 0 theory. The mass gap Δ = log 2 for SU(2), with every
-                intermediate quantity (polymer weights, Kotecký–Preiss sum,
-                transfer eigenvalues) computed exactly.
+                = 0 theory. The gap Δ = log 2 is hard-coded in
+                proof/transfer.py, not derived from a spectrum.
               </li>
               <li>
-                <strong className="text-white">Phase 2</strong> (§4): a rigorous,
-                machine-verified cluster-expansion domain β {"<"} β₀ʳⁱᵍ =
-                0.0145206 on the L = 2 torus, with exhaustive enumeration of all
-                88 closed polymers and a rigorous analytic tail bound.
+                <strong className="text-white">Phase 2</strong> (§4): torus-only
+                bound β₀ʳⁱᵍ = 0.0145206 on the L = 2 torus; the polymer weights are
+                incorrect (see proof/exact_weights.py). Correct-weight infinite-volume
+                bound: β ≤ 0.0167, certified μ ≥ 0.0063 (proof/rigorous_check.py).
               </li>
               <li>
-                <strong className="text-white">Phase 3</strong> (§5): the exact
-                character-space RG. The blocking rule r_a → r_a² is an algebraic
-                identity (Haar orthogonality), verified to machine precision; the
-                flow is a strict contraction onto the strong-coupling fixed point
-                β* = 0 with positive mass gap at every step.
+                <strong className="text-white">Phase 3</strong> (§5): r_a → r_a² is
+                exact decimation of a 1-D link chain, not a 4-D RG; the flow to β* =
+                0 is automatic (see proof/rg_flow.py).
               </li>
               <li>
-                <strong className="text-white">Phase 4</strong> (§6): the SU(3)
-                analogue of Phase 1: exact gap log 3 at β = 0 via Weyl
-                characters.
+                <strong className="text-white">Phase 4</strong> (§6): SU(3) gap log 3
+                is a cited ratio, not a derived Wilson-action gap
+                (see proof/su3_complete.py).
               </li>
               <li>
-                <strong className="text-white">Phase 5</strong> (§7):
-                nonperturbative numerical verification of the OS axioms
-                (reflection positivity at 5σ, exponential clustering,
-                orientation invariance) at β = 1 and β = 2.
+                <strong className="text-white">Phase 5</strong> (§7): small-lattice
+                Monte Carlo sanity check only.
               </li>
             </ul>
           </SubSection>
@@ -681,11 +684,12 @@ export default function PaperPage() {
           </Theorem>
 
           <Theorem
-            label="Mass gap at β = 0, SU(3)"
+            label="Mass gap at β = 0, SU(3) (cited, not derived)"
             statement={
               <>
-                At β = 0, SU(3) lattice Yang–Mills theory has spectral gap Δ_SU(3)
-                = log 3 ≈ {LOG3.toFixed(6)}.
+                At β = 0, the SU(3) eigenvalue ratio Δ_SU(3) = log 3 ≈ {LOG3.toFixed(6)}
+                appears in the code; it is not derived as a Wilson-action gap
+                (see proof/su3_complete.py).
               </>
             }
           />
@@ -699,7 +703,7 @@ export default function PaperPage() {
         <Section
           id="phase2"
           eyebrow="SECTION 4"
-          title="Phase 2: rigorous cluster expansion for β < β₀"
+          title="Phase 2: torus-only bound, superseded by correct-weight result"
         >
           <SubSection title="4.1 Polymer representation">
             <p>
@@ -780,38 +784,37 @@ export default function PaperPage() {
 
           <SubSection title="4.4 The verified convergence domain">
             <Theorem
-              label="Rigorous strong-coupling domain, machine-verified"
+              label="Strong-coupling domain with correct weights (certified)"
               statement={
                 <>
-                  On the L = 2 torus with the fundamental-channel polymer gas of
-                  §4.1, the Kadanoff–Pfeuty bound A(β) + tail(6, β) {"<"} 1 holds
-                  for all 0 {"<"} β {"<"} β₀ʳⁱᵍ with β₀ʳⁱᵍ = 0.0145206 (bisection;
-                  A + tail = 0.996710 at β₀). Throughout this region the transfer
-                  matrix has a spectral gap bounded by Δ(β) ≥ −log(A(β) +
-                  tail(β)) {">"} 0. In particular Δ ≥ 8.14 at β = β₀/2 and
-                  Δ(β₀) = log 2 − β₀²/4 {">"} 0.
+                  The certified strong-coupling domain applies to the
+                  <em>correct</em> Haar weights
+                  ζ(γ) = ∫ ∏ₚ Tr(Uₚ) dU (proof/exact_weights.py), not the
+                  Catalan-moment weights ζ(γ) = ∏ₗ I(kₗ) used in §4.1. Using
+                  Finner's inequality (proved in proof/THEOREM.md) with
+                  ε(β) ≤ β·exp(β)·5^(1/6)/2 + (cosh β − 1)/4 and the exhaustive
+                  counts C₆ = 4, C₇ = 0 (proof/count_crosscheck.py), the
+                  Kotecký–Preiss condition is certified in interval arithmetic
+                  for all β {"<"} β* = 0.0167; the certified decay rate there is
+                  μ ≥ 0.0063 (proof/rigorous_check.py).
                 </>
               }
             >
               <Proof>
-                All terms in A(β) are computed from the 88 enumerated polymers
-                with exact weights (Catalan moments, r_(1/2) from Bessel series
-                with controlled truncation), and the tail is a dominating
-                analytic bound, not an approximation. The root of A + tail = 1 is
-                found by bisection to 8 digits. The gap bound is the standard
-                Kadanoff–Pfeuty–Brydges transfer-matrix argument [6, 2]:
-                convergence of the polymer series bounds the ratio of the two
-                leading transfer eigenvalues by A + tail. Checks CE1–CE5 of{" "}
-                <code>proof/cluster_expansion.py</code> verify each ingredient.
+                proof/rigorous_check.py recomputes C₆ = 4 and C₇ = 0 exhaustively,
+                evaluates eps_up(β) with mpmath interval arithmetic, and verifies
+                the interval inequality 42·[4X⁶ + G⁷X⁸/(1−GX)]/(1−X⁶) ≤ α for
+                X = eps_up(β)·exp(s) with s = α + δ = 0.106 at β = 0.0167. Because
+                eps_up is increasing in β and the left side is increasing in X,
+                the certificate holds for all β {"<"} 0.0167.
               </Proof>
             </Theorem>
-            <Remark title="Conservativeness">
+            <Remark title="Scope">
               <p>
-                β₀ʳⁱᵍ = 0.0145 is far below the literature range β ≲ 0.12 [2]:
-                the price of (i) the tiny L = 2 torus, (ii) the strict KP
-                constant, and (iii) the dominant-channel truncation. The bound is
-                rigorous but not sharp; improvements are enumeration on larger
-                lattices and sharper polymer norms.
+                β* = 0.0167 is far below the literature range β ≲ 0.12 [2]; this
+                is deep strong coupling at fixed lattice spacing and says nothing
+                about the continuum limit β → ∞. Nothing here addresses the Clay
+                Millennium problem.
               </p>
             </Remark>
           </SubSection>
@@ -930,7 +933,7 @@ export default function PaperPage() {
             statement={
               <>
                 For SU(3) lattice Yang–Mills at β = 0: the polymer weights vanish,
-                the KP sum is 0 {"<"} 1, and the spectral gap is Δ_SU(3) = log 3 ≈{" "}
+                the KP sum is 0 {"<"} 1, and the spectral gap is Δ_SU(3) = log 3 (cited, not derived) — cited ratio, not derived ≈{" "}
                 {LOG3.toFixed(7)}.
               </>
             }

@@ -16,7 +16,7 @@ const Y_MAX = 30;
 const X_MIN = 0;
 const X_MAX = 0.03;
 
-/** Balian et al. strong-coupling mass-gap lower bound. */
+/** deltaBeta = log 2 - beta^2/4 — cited, not derived; shown for reference only. */
 const deltaBeta = (beta: number) => LOG2 - (beta * beta) / 4;
 
 export function MassGapChart() {
@@ -35,17 +35,17 @@ export function MassGapChart() {
       <div className="overflow-x-auto">
         <svg
           role="img"
-          aria-label="Log-scale chart comparing the rigorous cluster-expansion gap bound minus log of A plus tail, which falls from 29.3 to 0.33 as beta rises from 0 to 0.0144, against the analytic mass gap Delta of beta equal to log 2 minus beta squared over 4, which stays almost flat near 0.693. The region beta less than 0.0145 is shaded as rigorous."
+          aria-label="Chart comparing torus-only bound (superseded), certified interval-arithmetic domain beta <= 0.0167 (mu >= 0.0063), and the cited analytic asymptote 4 ln(4/beta) shown for reference only"
           viewBox={`0 0 ${W} ${H}`}
           className="mx-auto h-auto w-full min-w-[640px]"
         >
           <title>Rigorous gap bound versus the analytic mass gap</title>
 
-          {/* rigorous region shading */}
+          {/* certified region shading */}
           <rect
             x={M.left}
             y={M.top}
-            width={x(beta0) - M.left}
+            width={Math.max(0, x(0.0167) - M.left)}
             height={plotH}
             fill={palette.greenSoft}
           />
@@ -57,7 +57,7 @@ export function MassGapChart() {
             fontWeight={600}
             fontFamily="ui-monospace, monospace"
           >
-            rigorous region β {"<"} 0.0145
+            certified region β {"<"} 0.0167 (μ ≥ 0.0063)
           </text>
 
           {logDecades(Y_MIN, Y_MAX).map((tick) => (
@@ -156,10 +156,10 @@ export function MassGapChart() {
             fontWeight={600}
             fontFamily="ui-monospace, monospace"
           >
-            Δ(β) = log 2 − β²/4
+            cited asymptote Δ(β) = log 2 − β²/4
           </text>
 
-          {/* rigorous KP bound */}
+          {/* torus-only KP bound (superseded by certified result) */}
           <path
             d={beta
               .map(
@@ -208,36 +208,23 @@ export function MassGapChart() {
             fontSize={12}
             fontFamily="ui-monospace, monospace"
           >
-            β₀ʳⁱᵍ = 0.01452
+            β₀ʳⁱᵍ = 0.01452 (superseded)
           </text>
         </svg>
       </div>
 
       <figcaption className="mt-4 space-y-2 text-sm text-gray-400">
         <p className="flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-xs">
-          <span className="text-green-400">
-            — rigorous KP bound −log(A + tail), 38 points
+          <span className="text-blue-400">
+            — torus-only KP bound −log(A + tail), 38 points (superseded)
           </span>
-          <span className="text-blue-400">— analytic Δ(β) = log 2 − β²/4</span>
-          <span className="bg-green-500/15 px-2 text-green-300">
-            pale green — controlled region β {"<"} 0.0145
-          </span>
+          <span className="text-green-400">— certified domain β {"<"} 0.0167</span>
         </p>
-        <p>
-          Everything above the green curve is forbidden by the cluster
-          expansion: <span className="font-mono text-gray-300">−log(A + tail)</span>{" "}
-          is a rigorous <em>lower</em> bound on the mass gap, and the analytic
-          estimate <span className="font-mono text-blue-400">log 2 − β²/4</span>{" "}
-          sits below it everywhere in the controlled window. At{" "}
-          <span className="font-mono text-gray-300">β = β₀/2</span> the bound
-          still reads <span className="font-mono text-green-400">≥ 8.14</span>,
-          and it is still positive (0.325) at the edge of the domain.
-        </p>
-        <p className="text-gray-500">
-          The vertical scale is logarithmic, so the drop from 29.3 to 0.325
-          spans two decades while the true gap barely moves — exactly the point:
-          the bound is loose at strong coupling and tightens toward the
-          physical value log 2 as β decreases.
+        <p className="mt-2 text-yellow-300">
+          Superseded: the green curve uses incorrect Catalan-moment weights; the
+          certified interval-arithmetic domain is β {"<"} 0.0167 with μ ≥ 0.0063
+          (proof/rigorous_check.py). The analytic estimate log 2 − β²/4 is cited,
+          not derived.
         </p>
       </figcaption>
     </figure>

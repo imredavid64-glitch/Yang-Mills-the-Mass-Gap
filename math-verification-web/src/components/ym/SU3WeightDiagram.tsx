@@ -236,9 +236,9 @@ export function SU3WeightDiagram() {
         <p>
           Hence the exact SU(3) gap{" "}
           <span className="font-mono text-green-400">
-            Δ_SU(3) = log 3 = {LOG3.toFixed(6)}
+            Δ_SU(3) = log 3 (cited, not derived) — cited ratio, not derived = {LOG3.toFixed(6)}
           </span>{" "}
-          — the QCD analogue of the SU(2) result Δ = log 2.
+          — the QCD analogue of the SU(2) result Δ = log 2 (cited, not derived).
         </p>
         <p className="text-gray-500">
           Low-lying SU(3) multiplicities computed exactly by the code, in
