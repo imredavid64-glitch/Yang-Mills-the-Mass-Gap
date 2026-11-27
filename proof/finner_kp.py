@@ -3,6 +3,11 @@ Infinite-volume strong-coupling convergence for 4D SU(2) Wilson gauge theory,
 with a polymer bound that does NOT use the (incorrect) Catalan link weights of
 cluster_expansion.py and does NOT truncate to the j = 1/2 channel.
 
+NOTE: the certified statement is proof/rigorous_check.py (beta <= 0.0178: analytic eps bound +
+interval arithmetic), with proofs in proof/THEOREM.md.  The floating-point numbers printed by
+THIS script (e.g. beta_KP = 0.01834, which uses a quadrature value of eps) are exploratory and
+not certified.
+
 SETUP (exact)
 -------------
 f(U) = exp(beta Tr U / 2) / a(beta),  a = int exp(beta Tr U/2) dU = 2 I_1(beta)/beta,
@@ -21,9 +26,9 @@ F2  Finner's inequality (generalised Holder, product measure): if each link lies
     in at most q plaquettes of gamma then  |zeta(gamma)| <= prod_p ||g||_q.
     Every link of Z^4 lies in 6 plaquettes, so q = 6:
         |zeta(gamma)| <= eps^{|gamma|},   eps(beta) := ||g||_{L^6(Haar)}.
-    (cited from Finner 1992, not re-proved here.)
+    (proved in proof/THEOREM.md.)
 F3  Connected n-subsets containing a given vertex of a graph of max degree D:
-    at most (e D)^(n-1).   (standard; cited from memory, sanity-checked in FK2.)
+    at most (e D)^(n-1).   (proved in proof/THEOREM.md, Lemma 3; sanity-checked in FK2.)
     The plaquette graph (share a link) of Z^4 has D = 20.
 F4  Kotecky-Preiss: if for all gamma
         sum_{gamma' incompatible with gamma} |zeta(gamma')| e^{(alpha+delta)|gamma'|}
