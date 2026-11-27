@@ -201,6 +201,9 @@ def main():
         "rigorous_check.py",
         "CERTIFIED STRONG-COUPLING INEQUALITY (interval arithmetic)"))
     results.append(run_yang_mills_phase(
+        "dobrushin_toy_test.py",
+        "DOBRUSHIN-TYPE INDUCTION (toy polymer gas)"))
+    results.append(run_yang_mills_phase(
         "rg_flow.py",
         "PHASE 3 - RG FLOW TO CONTINUUM"))
     results.append(run_yang_mills_phase(

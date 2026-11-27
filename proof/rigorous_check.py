@@ -1,13 +1,15 @@
 """
 Computer-assisted certificate for proof/THEOREM.md  (interval arithmetic, mpmath.iv).
 
-It certifies, for beta <= BETA_STAR, the Kotecky-Preiss inequality
+It certifies, for beta <= BETA_STAR, condition (C_delta) of Theorem A in THEOREM.md in the form
 
-    21 * [ C_6 x^6 + C_7 x^7 + G^7 x^8 / (1 - G x) ]  <=  alpha ,     x = eps_up(beta) e^s,
+    42 * [ C_6 X^6 + C_7 X^7 + G^7 X^8 / (1 - G X) ] / (1 - X^6)  <=  alpha ,
+                                                      X = eps_up(beta) e^s,  s = alpha + delta,
 
-with s = alpha + delta, and reports the certified delta > 0.
+(the factor 42 = 21 * 2 comes from the slack alpha|g|/2 in (C_delta); 1/(1 - X^6) bounds
+1/(1-u) because u <= X^n <= X^6 for n >= 6), and reports the certified delta > 0.
 
-Ingredients (all proved in THEOREM.md, except the two cited black boxes there):
+Ingredients (all proved in THEOREM.md; the cited black boxes B1, B2 there are not used by this check):
   * eps_up(beta) = beta e^beta 5^(1/6)/2 + (cosh beta - 1)/4   >= ||g||_{L^6(Haar)}   (Lemma 4)
   * G = e * 20                                                   (Lemma 3, plaquette graph degree 20)
   * C_6 = 4, C_7 = 0: exhaustive search (recomputed here, ~15 s)  (Lemma 5, computer-assisted)
@@ -40,13 +42,13 @@ def eps_up(beta):
 
 
 def lhs(beta, s):
-    """Interval enclosure of 21 [ C6 x^6 + C7 x^7 + G^7 x^8/(1-Gx) ], x = eps_up e^s."""
+    """Interval enclosure of 42 [ C6 X^6 + C7 X^7 + G^7 X^8/(1-GX) ] / (1 - X^6), X = eps_up e^s."""
     x = eps_up(beta) * iv.exp(s)
     gx = G * x
     if not (gx.b < 1):
         return None
     exact = sum(c * x ** n for n, c in COUNTS.items())
-    return 21 * (exact + G ** 7 * x ** 8 / (1 - gx))
+    return 42 * (exact + G ** 7 * x ** 8 / (1 - gx)) / (1 - x ** 6)
 
 
 def best_s_float(beta_f):

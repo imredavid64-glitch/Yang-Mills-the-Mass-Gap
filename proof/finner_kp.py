@@ -3,7 +3,7 @@ Infinite-volume strong-coupling convergence for 4D SU(2) Wilson gauge theory,
 with a polymer bound that does NOT use the (incorrect) Catalan link weights of
 cluster_expansion.py and does NOT truncate to the j = 1/2 channel.
 
-NOTE: the certified statement is proof/rigorous_check.py (beta <= 0.0178: analytic eps bound +
+NOTE: the certified statement is proof/rigorous_check.py (beta <= 0.0167: analytic eps bound +
 interval arithmetic), with proofs in proof/THEOREM.md.  The floating-point numbers printed by
 THIS script (e.g. beta_KP = 0.01834, which uses a quadrature value of eps) are exploratory and
 not certified.
