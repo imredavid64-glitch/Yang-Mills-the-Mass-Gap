@@ -12,7 +12,7 @@ Millennium problem. Its value is that the argument is written out and the cited 
 | Lemmas 1–4 (polymer representation, vanishing, animal bound, Finner, analytic bound on ε) | proved below |
 | Lemma 5 (exact polymer counts C₆=4, C₇=0) | computer-assisted exhaustive search |
 | Final numerical inequality | interval arithmetic (`proof/rigorous_check.py`) |
-| Lemma D, expansion Lemma 6, geometry Lemma 7, **Theorem C** (exponential clustering of local observables, finite boxes, uniform in the volume) | proved below; Lemma D sanity-tested in the toy gas; the expansion and geometry steps are NOT machine-checked |
+| Lemma D, expansion Lemma 6, geometry Lemma 7, **Theorem C** (exponential clustering of local observables, finite boxes, uniform in the volume) | proved below; Lemma D and Lemma 6 machine-checked on the toy gas (`proof/dobrushin_toy_test.py`, T3/T4); Lemma 7 tested on Z⁴ geometry (`scratch/check_lemma7.py`, outside the repo) |
 | **B2**: reflection positivity + exponential clustering => transfer-matrix gap (OS reconstruction), and the passage to infinite volume | **cited** |
 
 ## Setting
