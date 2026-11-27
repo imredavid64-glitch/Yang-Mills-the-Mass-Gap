@@ -237,9 +237,24 @@ in Theorem C are written out but not machine-checked; they are the least indepen
   correlations of any two bounded observables supported on link sets separated by Euclidean time `t` decay like
   `e^{−μt}`, with constants depending only on the supports, uniformly in the box. Certified decay rates μ:
   2.146 (β=0.002), 1.226 (0.005), 0.527 (0.01), 0.0063 (0.0167).
-* **Cited, not proved here (B2):** Wilson-action reflection positivity (Osterwalder–Seiler), OS reconstruction and
-  the passage to the infinite-volume limit: uniform exponential clustering of all local gauge-invariant observables
-  with rate μ gives a transfer-matrix spectral gap ≥ μ in lattice units. Nothing else is cited.
+* **Cited, not proved here (B2):** Wilson-action reflection positivity (Osterwalder–Seiler 1975/1978),
+  OS reconstruction, and the passage to the infinite-volume limit. What the cited theorem would need to
+  contribute here:
+
+  (i) reflection positivity of the Wilson action at this β (a classical theorem;
+      all that's needed for the axioms is positivity and the reflection-positivity inequality);
+  (ii) the Euclidean Schwinger functions built from the finite-box polymer expansion satisfy the
+      Osterwalder–Schrader axioms (regularity, clustering — proved here for local link observables,
+      symmetry — hypercubic invariance is broken only by the box boundary, Euclidean invariance is
+      not available at fixed lattice spacing);
+  (iii) OS reconstruction then gives a Hilbert space, a self-adjoint Hamiltonian H (the transfer
+      log), a vacuum Ω, and a spectral representation of the connected correlators;
+  (iv) exponential clustering with rate μ implies the bottom of the continuous spectrum of H
+      (or its first excitation above Ω) lies at least μ above the vacuum — i.e. a transfer-matrix
+      gap ≥ μ in lattice units.
+
+  Items (i) and (ii)-(iv) are standard corollaries of OS reconstruction; I cite them rather than
+  re-deriving Balaban's multi-paper program. Nothing else is cited.
 
 ## Appendix: exact weights (not needed above)
 
