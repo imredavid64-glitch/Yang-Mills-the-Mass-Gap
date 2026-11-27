@@ -12,8 +12,8 @@ Millennium problem. Its value is that the argument is written out and the cited 
 | Lemmas 1–4 (polymer representation, vanishing, animal bound, Finner, analytic bound on ε) | proved below |
 | Lemma 5 (exact polymer counts C₆=4, C₇=0) | computer-assisted exhaustive search |
 | Final numerical inequality | interval arithmetic (`proof/rigorous_check.py`) |
-| **B1**: from the polymer-gas bounds to decay of correlations of local gauge-invariant observables | **cited** (standard cluster-expansion corollary; NOT proved here) |
-| **B2**: reflection positivity + exponential clustering ⇒ transfer-matrix gap (OS reconstruction) | **cited** |
+| Lemma D, expansion Lemma 6, geometry Lemma 7, **Theorem C** (exponential clustering of local observables, finite boxes, uniform in the volume) | proved below; Lemma D sanity-tested in the toy gas; the expansion and geometry steps are NOT machine-checked |
+| **B2**: reflection positivity + exponential clustering => transfer-matrix gap (OS reconstruction), and the passage to infinite volume | **cited** |
 
 ## Setting
 
@@ -78,7 +78,7 @@ Use `|∏a − ∏a'| ≤ Σ_i |a_i − a'_i| ∏_{j≠i} max(|a_j|,|a'_j|)` and
 by (C_δ) and `y ≤ e^y`. ∎
 
 *Remark.* (C_δ) implies the Kotecký–Preiss condition `Σ_{γ'≁γ} |ζ(γ')| e^{(α+δ)|γ'|} ≤ α|γ|` (the extra
-term γ' = γ is ≤ X⁶ ≪ α|γ|/2), so the cited corollary B1 applies with the same α, δ.
+term γ' = γ is ≤ X⁶ ≪ α|γ|/2), so the standard Kotecky-Preiss corollaries also apply with the same α, δ.
 
 ## Application to SU(2) Wilson theory
 
@@ -134,17 +134,112 @@ since `u(γ') e^{δ|γ'|} ≤ X^{|γ'|}` and `u ≤ X⁶`. This is ≤ α|γ₀|
 `42 [4X⁶ + G⁷X⁸/(1−GX)]/(1−X⁶) ≤ α`, which `rigorous_check.py` certifies in interval arithmetic; it is
 monotone in β (ε_up increases with β), so it covers every β ≤ 0.0167. ∎
 
-## Consequences (with the cited black boxes)
+## Correlations of observables (Theorem C)
 
-* **Proved (Theorems A, B):** uniform-in-volume bounds on the polymer ratios and exponential decay of their
-  dependence on distant polymers. E.g. the probability that a given polymer occurs in the (signed) gas on any
-  finite Θ is at most `u/(1−u)`.
-* **Cited, not proved here (B1):** (C_δ) ⇒ the Kotecký–Preiss condition ⇒ (standard corollary) absolutely
-  convergent cluster expansion and decay at rate ≥ δ of connected correlations of local gauge-invariant
-  observables. Passing from the ratio bounds above to observables needs expanding the observables into the
-  polymer gas and comparing environments with Theorem A(3); I did not write that argument out.
-* **Cited (B2):** Wilson action reflection positivity (Osterwalder–Seiler) and OS reconstruction: such
-  exponential clustering gives a transfer-matrix gap ≥ δ(β) in lattice units.
+Work in a finite box Λ ⊂ Z⁴ with free boundary conditions; Γ = Γ_Λ is the finite set of polymers,
+`Z = Z_Γ > 0`. Assume `β ≤ 0.0167` and fix `(α, μ)` certified by `rigorous_check.py` so that **(C_μ)** holds and
+**(K2)** `G ε_up e^{12α/7 + μ} < 1`. Put `u(η) = |ζ(η)| e^{α|η|}`, `Φ(H) = Z_{Γ∖H}/Z_Γ` for `H ⊂ Γ`, and
+`U(H) = Σ_{η∈H} u(η)/(1 − u(η))`. A polymer *touches* a set of links if one of its plaquettes contains a link of
+the set. From the proof of Theorem B, for every plaquette q,
+
+    Σ_{η ∋ q} u(η) e^{μ|η|}/(1 − u(η))  ≤  α/42.                                                    (σ)
+
+Consequently, if H is the set of polymers touching a link set Λ₀, then `Σ_{η∈H} u e^{μ|η|}/(1−u) ≤ 6|Λ₀|·α/42 = α|Λ₀|/7`
+(each link lies in ≤ 6 plaquettes), and in particular `U(H) ≤ α|Λ₀|/7`.
+
+**Sequential removal.** If `η_1,…,η_k ∈ Γ` are distinct, then by (I1)
+`Φ({η_1..η_k}) = ∏_j a_j`, `a_j = (1 + ζ(η_j) R(Γ∖{η_1..η_{j−1}}, η_j))^{-1}`, and by Theorem A(2)
+`|a_j| ≤ (1−u_j)^{-1}`, `|a_j − 1| ≤ u_j/(1−u_j)`. Hence `|Φ(H)| ≤ e^{U(H)}`.
+
+**Lemma D (two-set comparison).** For H₁, H₂ ⊂ Γ, with J = H₂∖H₁, K = H₁∩H₂ and
+`D(η,H₁) = min_{ζ∈H₁} D(η,ζ)`,
+
+    |Φ(H₁∪H₂) − Φ(H₁)Φ(H₂)|  ≤  |Φ(H₁)| e^{U(J)} [ 2e^{μ} Σ_{η∈J} u_η e^{−μ D(η,H₁)}/(1−u_η)  +  (e^{U(K)} − 1) ].
+
+*Proof.* Remove H₁ first, then J: `Φ(H₁∪H₂) = Φ(H₁) P'`, `P' = ∏_{η∈J} a(η; Γ∖H₁∖earlier)`. Remove J first, then K:
+`Φ(H₂) = P·O`, `P = ∏_{η∈J} a(η; Γ∖earlier)`, `O = ∏_{η∈K} a(·)`. So the difference is
+`Φ(H₁)[(P' − P) + P(1 − O)]`. We have `|P| ≤ e^{U(J)}` and `|1 − O| ≤ e^{U(K)} − 1`. For `P' − P`: the two
+environments of η ∈ J differ exactly by the removal of H₁, so they agree on `B_ℓ(η)` for `ℓ = D(η,H₁) − 1`
+and Theorem A(3) gives `|R − R'| ≤ 2e^{α|η|}e^{μ}e^{−μD(η,H₁)}`. The product-difference inequality used in the
+proof of Theorem A(3) then gives the first term. ∎
+
+**Lemma 6 (observable expansion).** Let A be a bounded function of the links in a finite set X, and for a plaquette
+set S let `ζ_A(S) = ∫ A ∏_{p∈S} g(U_p) dU`. Let `𝔖_X` be the plaquette sets all of whose link-connected components
+touch X (including ∅). Then
+
+    ⟨A⟩ = Σ_{S∈𝔖_X} ζ_A(S) Φ(Ĥ_X(S)),    Ĥ_X(S) = {η : η touches X ∪ links(S)},    |ζ_A(S)| ≤ ‖A‖ ε^{|S|}.
+
+The same holds for a function AB of the links in X ∪ Y, with `𝔖_{X∪Y}`.
+*Proof.* Expand `∏(1+g_p) = Σ_S ∏_{p∈S} g_p` and split S into the union S_X of components touching X and the rest S'.
+The components of S' share no link with S_X or with X, so the integral factorises as `ζ_A(S_X) ∏_{γ∈S'} ζ(γ)`.
+The map S ↦ (S_X, family of polymers of S') is a bijection onto pairs with S_X ∈ 𝔖_X and a compatible family of
+polymers touching neither X nor links(S_X); summing the latter gives `Z_{Γ∖Ĥ_X(S_X)}`. The bound is Finner's
+inequality with the constant ‖A‖ pulled out. ∎
+
+**Lemma 7 (geometry).** Let τ(l) be the time coordinate of the base site of a link l. A link-connected set of n
+plaquettes has τ-range ≤ n. For link sets X, Y put `t = min_Y τ − max_X τ`, assumed ≥ 1. Then:
+(a) a link-connected plaquette set touching both X and Y has ≥ t plaquettes;
+(b) if S_X ∈ 𝔖_X, S_Y ∈ 𝔖_Y, `Λ_X = X ∪ links(S_X)`, `Λ_Y = Y ∪ links(S_Y)`, then every l' ∈ Λ_Y, l'' ∈ Λ_X satisfy
+    `τ(l') − τ(l'') ≥ t − |S_X| − |S_Y|`;
+(c) for polymers η touching Λ_Y and ζ touching Λ_X, `D(η,ζ) ≥ t − |S_X| − |S_Y| − |η|`; and a polymer touching both
+    Λ_X and Λ_Y has `|η| ≥ t − |S_X| − |S_Y|`.
+*Proof.* A plaquette has τ-range ≤ 1; adding a plaquette that shares a link raises the range by ≤ 1, so range ≤ n.
+(a) follows. A component of S_X touching X lies within τ-range |c| of a link of X, giving (b). For (c): η contains a
+link l' ∈ Λ_Y and ζ a link l'' ∈ Λ_X; along a chain `η = h_0, …, h_m = ζ` consecutive polymers share a link, so
+`|τ(l') − τ(l'')| ≤ Σ_{i=0}^m |h_i|`, i.e. `D(η,ζ) = Σ_{i≥1}|h_i| ≥ |τ(l')−τ(l'')| − |η|`; the last claim is the range bound
+for η itself. ∎
+
+**Theorem C (exponential clustering).** Let `β ≤ 0.0167`, `(α,μ)` as above, `w = ε_up e^{12α/7+μ}` (so `Gw < 1` by (K2)),
+and `K(Z) = exp(6|Z| w/(1 − Gw))`. For finite link sets X, Y in a box Λ with `t ≥ 1` as in Lemma 7, and bounded
+functions A of the links in X and B of the links in Y,
+
+    | ⟨AB⟩ − ⟨A⟩⟨B⟩ |  ≤  5 e^{μ} ‖A‖_∞ ‖B‖_∞ e^{(3α/7)(|X|+|Y|)} K(X) K(Y) e^{−μ t},
+
+uniformly in Λ.
+*Proof.* *Counting.* For a link set Z and `w' ≤ w`: `Σ_{S∈𝔖_Z} w'^{|S|} ≤ K(Z)`. Indeed each component of S contains a
+plaquette having a link in Z (at most 6|Z| such plaquettes), distinct components give distinct choices, and
+`Σ_{c∋q connected} w'^{|c|} ≤ Σ_n (eD)^{n−1} w'^n = w'/(1 − Gw')` by Lemma 3, so
+`Σ_S w'^{|S|} ≤ ∏_{q}(1 + w'/(1−Gw')) ≤ K(Z)`.
+
+*Decomposition.* By Lemma 6,
+`⟨AB⟩ − ⟨A⟩⟨B⟩ = Σ_{S∈𝔖_{X∪Y}} ζ_{AB}(S)Φ(Ĥ_{X∪Y}(S)) − Σ_{S_X∈𝔖_X, S_Y∈𝔖_Y} ζ_A(S_X)ζ_B(S_Y)Φ(Ĥ_X(S_X))Φ(Ĥ_Y(S_Y))`.
+Call a pair (S_X, S_Y) *good* if no component of S_X touches Y, no component of S_Y touches X, and
+`links(S_X) ∩ links(S_Y) = ∅`. Good pairs correspond bijectively to those `S ∈ 𝔖_{X∪Y}` with no component touching
+both X and Y (take S = S_X ⊔ S_Y); for them `ζ_{AB}(S) = ζ_A(S_X)ζ_B(S_Y)` (the integrands depend on disjoint link sets)
+and `Ĥ_{X∪Y}(S) = Ĥ_X(S_X) ∪ Ĥ_Y(S_Y)`. So the difference splits into three sums:
+(good) `Σ ζ_Aζ_B [Φ(H₁∪H₂) − Φ(H₁)Φ(H₂)]`, (II) the terms of `𝔖_{X∪Y}` with a component touching both, and (bad)
+minus the product terms of bad pairs.
+
+*(II) and (bad).* In (II), `|S| ≥ t` by Lemma 7(a); in a bad pair some component of S_X touches Y, or one of S_Y touches X,
+or a component of S_X and one of S_Y share a link, and in each case Lemma 7(a) gives `|S_X| + |S_Y| ≥ t`. Using
+`|ζ| ≤ ‖·‖ε^{|S|}` and `|Φ(Ĥ)| ≤ e^{U} ≤ e^{(α/7)(|X|+4|S_X|)}` (resp. Y, resp. X∪Y), each term is at most
+`‖A‖‖B‖ e^{(α/7)(|X|+|Y|)} (εe^{4α/7})^{s}`, `s = |S|` or `|S_X|+|S_Y|`. Since `s ≥ t`,
+`(εe^{4α/7})^s ≤ e^{−μt}(εe^{4α/7+μ})^s ≤ e^{−μt}w^s`, so by the counting estimate each of (II) and (bad) is
+`≤ ‖A‖‖B‖ e^{(α/7)(|X|+|Y|)} e^{−μt} K(X)K(Y)`.
+
+*(good).* Fix a good pair, `H₁ = Ĥ_X(S_X)`, `H₂ = Ĥ_Y(S_Y)`, `s_X = |S_X|`, `s_Y = |S_Y|`, `s = s_X + s_Y`,
+`Y_S = (α/7)(|Y| + 4s_Y)`. By (σ), `U(H₁) ≤ (α/7)(|X|+4s_X)` and `Σ_{η∈H₂} u e^{μ|η|}/(1−u) ≤ Y_S`.
+By Lemma 7(c), for η ∈ J: `e^{−μD(η,H₁)} ≤ e^{−μ(t−s)} e^{μ|η|}`, so the first sum in Lemma D is
+`≤ e^{−μ(t−s)} Y_S`; and every η ∈ K has `|η| ≥ t − s`, so `U(K) ≤ e^{−μ(t−s)} Y_S` and
+`e^{U(K)} − 1 ≤ Y_S e^{Y_S} e^{−μ(t−s)}`. Lemma D gives
+`|Φ(H₁∪H₂) − Φ(H₁)Φ(H₂)| ≤ e^{U(H₁)} e^{Y_S} Y_S e^{−μ(t−s)} [2e^{μ} + e^{Y_S}] ≤ 3e^{μ} e^{U(H₁)+3Y_S} e^{−μt} e^{μ s}`,
+and `U(H₁) + 3Y_S ≤ (3α/7)(|X|+|Y|) + (12α/7)s`. Multiplying by `|ζ_A||ζ_B| ≤ ‖A‖‖B‖ε^{s}` and summing over all pairs
+gives `≤ 3e^{μ}‖A‖‖B‖ e^{(3α/7)(|X|+|Y|)} e^{−μt} Σ_{S_X,S_Y} w^{s_X+s_Y} ≤ 3e^{μ}‖A‖‖B‖ e^{(3α/7)(|X|+|Y|)} e^{−μt} K(X)K(Y)`.
+
+Adding the three bounds, with `3e^{μ} + 2 ≤ 5e^{μ}`, proves the theorem. ∎
+
+*Caveat.* Lemma D is checked numerically in the toy gas (`dobrushin_toy_test.py`, T3). Lemma 6, Lemma 7 and the assembly
+in Theorem C are written out but not machine-checked; they are the least independently verified part of this document.
+
+## Consequences
+
+* **Proved (Theorems A, B, C):** for `β ≤ 0.0167`, in every finite box with free boundary conditions, connected
+  correlations of any two bounded observables supported on link sets separated by Euclidean time `t` decay like
+  `e^{−μt}`, with constants depending only on the supports, uniformly in the box. Certified decay rates μ:
+  2.146 (β=0.002), 1.226 (0.005), 0.527 (0.01), 0.0063 (0.0167).
+* **Cited, not proved here (B2):** Wilson-action reflection positivity (Osterwalder–Seiler), OS reconstruction and
+  the passage to the infinite-volume limit: uniform exponential clustering of all local gauge-invariant observables
+  with rate μ gives a transfer-matrix spectral gap ≥ μ in lattice units. Nothing else is cited.
 
 ## Appendix: exact weights (not needed above)
 

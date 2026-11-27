@@ -8,8 +8,10 @@ It certifies, for beta <= BETA_STAR, condition (C_delta) of Theorem A in THEOREM
 
 (the factor 42 = 21 * 2 comes from the slack alpha|g|/2 in (C_delta); 1/(1 - X^6) bounds
 1/(1-u) because u <= X^n <= X^6 for n >= 6), and reports the certified delta > 0.
+It also certifies condition (K2)  G * eps_up * exp(12 alpha/7 + mu) < 1  needed by Theorem C
+(exponential clustering at rate mu), with mu the certified rate.
 
-Ingredients (all proved in THEOREM.md; the cited black boxes B1, B2 there are not used by this check):
+Ingredients (all proved in THEOREM.md; the one cited black box there, B2, is not used by this check):
   * eps_up(beta) = beta e^beta 5^(1/6)/2 + (cosh beta - 1)/4   >= ||g||_{L^6(Haar)}   (Lemma 4)
   * G = e * 20                                                   (Lemma 3, plaquette graph degree 20)
   * C_6 = 4, C_7 = 0: exhaustive search (recomputed here, ~15 s)  (Lemma 5, computer-assisted)
@@ -66,12 +68,16 @@ def best_s_float(beta_f):
 
 
 def certify(beta_f, s_f):
+    """Return (alpha, mu, k2_ok).  alpha = upper endpoint of the left side of (K1); mu = lower
+    endpoint of s - alpha, so alpha + mu <= s and (C_mu) holds with this alpha (monotone in X).
+    k2_ok certifies (K2):  G * eps_up(beta) * exp(12 alpha / 7 + mu) < 1  (Theorem C)."""
     beta, s = iv.mpf(beta_f), iv.mpf(s_f)
     r = lhs(beta, s)
     assert r is not None, "G*x >= 1"
-    alpha = r.b                      # upper endpoint: alpha >= LHS
-    delta = s - alpha                # interval; lower endpoint is the certified bound
-    return alpha, delta.a
+    alpha = iv.mpf(r.b)              # upper endpoint: alpha >= LHS
+    mu = iv.mpf((s - alpha).a)       # certified lower bound for the decay rate
+    k2 = G * eps_up(beta) * iv.exp(12 * alpha / 7 + mu)
+    return alpha, mu, bool(k2.b < 1)
 
 
 def run() -> bool:
@@ -105,15 +111,18 @@ def run() -> bool:
     BETA_STAR = round(lo - 1e-4, 4)          # stay one grid step inside
     d, s = best_s_float(BETA_STAR)
     s = round(s, 3)
-    alpha, delta_cert = certify(BETA_STAR, s)
-    check(f"CERT beta <= {BETA_STAR}: KP inequality holds with s = {s}, alpha = {float(alpha):.6f}; "
-          f"certified delta >= {float(delta_cert):.6f} > 0",
+    alpha, delta_cert, k2_ok = certify(BETA_STAR, s)
+    check(f"CERT beta <= {BETA_STAR}: (C_mu) holds with s = {s}, alpha = {float(alpha):.6f}; "
+          f"certified mu >= {float(delta_cert):.6f} > 0",
           delta_cert > 0)
-    print(f"\n  >>> BETA_STAR = {BETA_STAR},  certified delta_min = {float(delta_cert):.6f}")
+    check(f"CERT (K2) G*eps*exp(12 alpha/7 + mu) < 1 at beta = {BETA_STAR}", k2_ok)
+    print(f"\n  >>> BETA_STAR = {BETA_STAR},  certified decay rate mu_min = {float(delta_cert):.6f}")
     for b in (0.002, 0.005, 0.01, BETA_STAR):
         d, s = best_s_float(b)
-        a, dc = certify(b, round(s, 3))
-        print(f"  [info] beta = {b:<7} certified gap lower bound delta >= {float(dc):.4f}")
+        a, dc, k2b = certify(b, round(s, 3))
+        print(f"  [info] beta = {b:<7} decay rate mu >= {float(dc):.4f}   alpha = {float(a):.4f}   "
+              f"(K2 {'ok' if k2b else 'FAILS'})")
+        ok &= k2b
     print("RIGOROUS CHECK:", "PASS" if ok else "FAIL")
     return ok
 

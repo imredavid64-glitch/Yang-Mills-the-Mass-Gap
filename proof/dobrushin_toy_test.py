@@ -1,4 +1,4 @@
-"""
+r"""
 Numerical test of the Dobrushin-type induction proved in proof/THEOREM.md (Theorem A),
 on a toy polymer gas where Z can be computed exactly.
 
@@ -15,6 +15,9 @@ Claims tested on random sub-gases Theta (arbitrary subsets of polymers):
       |R(Theta,g) - R(Theta',g)| <= 2 e^{alpha |g|} e^{-delta (d-1)},
       D(g, eta) = min over chains g = h_0, h_1, ..., h_m = eta (consecutive incompatible)
       of  sum_{i>=1} |h_i|.
+  T3  Lemma D (two-set comparison).  With Phi(H) = Z_{Gamma \ H} / Z_Gamma, J = H2 \ H1, K = H1 & H2:
+      |Phi(H1 u H2) - Phi(H1) Phi(H2)|  <=  |Phi(H1)| e^{U(J)} [ 2 e^{mu} sum_{eta in J} u_eta e^{-mu D(eta,H1)}/(1-u_eta)
+                                                               + (e^{U(K)} - 1) ],     U(H) = sum_{eta in H} u/(1-u).
 """
 from __future__ import annotations
 
@@ -145,6 +148,32 @@ def run(seed=7, trials=4000) -> bool:
     print(f"[{'PASS' if worst2 <= 1 else 'FAIL'}] T2 decay |R - R'| <= 2 e^(alpha|g|) e^(-delta (d-1)): "
           f"max ratio {worst2:.4f} over {tested} tests (<= 1)")
     ok &= worst2 <= 1
+    # T3: Lemma D on the full toy gas Gamma = all polymers
+    def Phi(H):
+        keep = [g for g in polys if g not in H]
+        return Zsum(keep, zeta, N) / Zsum(polys, zeta, N)
+
+    uu = {g: abs(zeta[g]) * exp(alpha * (g[1] - g[0])) for g in polys}
+    Ufun = lambda H: sum(uu[g] / (1 - uu[g]) for g in H)
+    Dall = {g: Dmetric(polys, g) for g in polys}
+    worst3 = 0.0
+    tested3 = 0
+    for _ in range(trials):
+        H1 = set(rnd.sample(polys, rnd.randint(1, 6)))
+        H2 = set(rnd.sample(polys, rnd.randint(1, 6)))
+        J, K = H2 - H1, H1 & H2
+        lhs = abs(Phi(H1 | H2) - Phi(H1) * Phi(H2))
+        s_term = 0.0
+        for eta in J:
+            d = min(Dall[eta][z] for z in H1)
+            s_term += uu[eta] * exp(-delta * d) / (1 - uu[eta])
+        rhs = abs(Phi(H1)) * exp(Ufun(J)) * (2 * exp(delta) * s_term + (exp(Ufun(K)) - 1))
+        if rhs > 0:
+            worst3 = max(worst3, lhs / rhs)
+            tested3 += 1
+    print(f"[{'PASS' if worst3 <= 1 else 'FAIL'}] T3 Lemma D two-set comparison: max lhs/rhs = {worst3:.4f} "
+          f"over {tested3} random (H1,H2) (<= 1)")
+    ok &= worst3 <= 1
     print("DOBRUSHIN TOY TEST:", "PASS" if ok else "FAIL")
     return ok
 
