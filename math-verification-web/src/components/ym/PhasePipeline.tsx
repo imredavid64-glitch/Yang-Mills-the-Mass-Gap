@@ -21,22 +21,22 @@ const steps: Step[] = [
   {
     id: "P1",
     label: "β=0 exact",
-    headline: "Δ = log 2",
-    fill: "#064e3b",
-    stroke: palette.green,
+    headline: "Δ = log 2 (cited, not derived)",
+    fill: "#4d2e0e",
+    stroke: "#d97706",
     dashed: false,
-    tag: "proven",
-    tagColor: palette.green,
+    tag: "superseded",
+    tagColor: "#d97706",
   },
   {
     id: "P2",
     label: "Cluster expansion",
-    headline: "β₀ = 0.0145",
-    fill: "#064e3b",
-    stroke: palette.green,
+    headline: "torus-only, not rigorous",
+    fill: "#4d2e0e",
+    stroke: "#d97706",
     dashed: false,
-    tag: "proven",
-    tagColor: palette.green,
+    tag: "superseded",
+    tagColor: "#d97706",
   },
   {
     id: "P3",
@@ -51,12 +51,12 @@ const steps: Step[] = [
   {
     id: "P4",
     label: "SU(3)",
-    headline: "Δ = log 3",
-    fill: "#064e3b",
-    stroke: palette.green,
+    headline: "cited, not derived",
+    fill: "#4d2e0e",
+    stroke: "#d97706",
     dashed: false,
-    tag: "proven",
-    tagColor: palette.green,
+    tag: "superseded",
+    tagColor: "#d97706",
   },
   {
     id: "P5",
@@ -231,8 +231,7 @@ export function PhasePipeline() {
             fontSize={11}
             fontFamily="ui-monospace, monospace"
           >
-            solid green = proven exact · blue = exact identity verified in code
-            · dashed purple = numerical evidence
+            solid yellow — superseded by audit · blue — exact identity verified in code · dashed purple — numerical evidence
           </text>
         </svg>
       </div>
@@ -246,7 +245,8 @@ export function PhasePipeline() {
           attached to it in the repository.
         </p>
         <ul className="flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs">
-          <li className="text-green-400">solid green — proven exactly</li>
+          <li className="text-yellow-400">solid yellow — superseded by audit (2026-11-27)</li>
+          <li className="text-green-400">solid green — proven exact</li>
           <li className="text-blue-400">
             blue — exact algebraic identity, verified in code
           </li>

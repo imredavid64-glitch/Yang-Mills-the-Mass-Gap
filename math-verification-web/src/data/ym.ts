@@ -76,9 +76,9 @@ export const phase3 = ymData.phase3;
 export const phase4 = ymData.phase4;
 export const phase5 = ymData.phase5;
 
-/** log 2 — the exact SU(2) mass gap at beta = 0. */
+/** log 2 — hard-coded in Phase 1, not derived (see audit at 2026-11-27). */
 export const LOG2 = Math.log(2);
-/** log 3 — the exact SU(3) mass gap at beta = 0. */
+/** log 3 — cited, not derived (see audit at 2026-11-27). */
 export const LOG3 = Math.log(3);
 /** Declared in the JSON so the chart and the prose cannot drift apart. */
 export const BETA0_RIG = ymData.phase2.beta0rig;

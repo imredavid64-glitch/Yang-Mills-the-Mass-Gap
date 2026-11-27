@@ -1,4 +1,12 @@
 """
+AUDIT NOTICE (2026-11-27)
+The link weights W = prod I(k_l) (Catalan numbers) are NOT the Haar integral of
+prod Tr U_p: e.g. for the elementary cube the exact value is 2^-4, the code
+uses 1 (see proof/WEIGHT_ERROR.md, proof/exact_weights.py).  The bound beta_0^rig
+below is a torus-only number dominated by the Eden-type tail (A ~ 0, tail ~ 0.99),
+not by the enumeration.  For an infinite-volume bound with correct weights see
+proof/finner_kp.py.
+
 Phase 2 — Kadanoff-Pfeuty cluster expansion for beta < beta_0 (SU(2), 4D).
 
 Character expansion of the Wilson action in the fundamental channel:

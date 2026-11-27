@@ -49,6 +49,25 @@ Osterwalder--Schrader Reconstruction}
 
 \maketitle
 
+\begin{center}
+\fbox{\parbox{0.92\textwidth}{\small
+\textbf{Status notice (2026-11-27, supersedes the claims below).}
+An audit found that this document overstates its results.
+(i) The Phase~1 gap $\log 2$ is a hard-coded constant, not a derived spectral gap;
+at $\beta=0$ connected correlators of gauge-invariant observables vanish, so the
+lattice gap is formally infinite, and the leading strong-coupling decay rate is
+$\approx 4\ln(4/\beta)$.
+(ii) The Phase~2 polymer weights $\prod_l I(k_l)$ are not the Haar integrals
+$\int\prod_p \Tr U_p\,dU$ (e.g.\ the elementary cube has exact value $2^{-4}$, not $1$).
+(iii) Phase~3 ($r\mapsto r^2$) is decimation of a one-dimensional chain, not a
+renormalization group for four-dimensional gauge theory, and flows away from the continuum.
+(iv) Phase~5 is a sanity check on a small lattice.
+What is established is only classical strong-coupling clustering at fixed lattice
+spacing (see \texttt{proof/finner\_kp.py}, $\beta<0.0167$, relying on cited theorems).
+\emph{Nothing here addresses the continuum limit or the Clay Millennium problem.}
+}}
+\end{center}
+
 \begin{abstract}
 We present a machine-verified, five-phase program for the Yang--Mills existence
 and mass gap Millennium Prize problem, implemented and checked in exact

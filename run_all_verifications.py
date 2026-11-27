@@ -192,6 +192,18 @@ def main():
         "cluster_expansion.py",
         "PHASE 2 - CLUSTER EXPANSION (beta < beta_0)"))
     results.append(run_yang_mills_phase(
+        "exact_weights.py",
+        "EXACT HAAR POLYMER WEIGHTS (audit of Phase 2)"))
+    results.append(run_yang_mills_phase(
+        "finner_kp.py",
+        "INFINITE-VOLUME STRONG-COUPLING BOUND (Finner + KP)"))
+    results.append(run_yang_mills_phase(
+        "rigorous_check.py",
+        "CERTIFIED STRONG-COUPLING INEQUALITY (interval arithmetic)"))
+    results.append(run_yang_mills_phase(
+        "dobrushin_toy_test.py",
+        "DOBRUSHIN-TYPE INDUCTION (toy polymer gas)"))
+    results.append(run_yang_mills_phase(
         "rg_flow.py",
         "PHASE 3 - RG FLOW TO CONTINUUM"))
     results.append(run_yang_mills_phase(

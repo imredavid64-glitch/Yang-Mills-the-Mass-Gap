@@ -235,7 +235,7 @@ export function KPChart() {
           for everything beyond size 6. Convergence of the cluster expansion
           needs this total to stay below 1, and it does all the way up to{" "}
           <span className="font-mono text-green-400">
-            β₀ʳⁱᵍ = 0.0145206
+            β* = 0.0167 (certified, interval arithmetic)
           </span>{" "}
           (bisection; the sum equals 0.99671 there).
         </p>

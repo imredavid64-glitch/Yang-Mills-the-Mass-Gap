@@ -14,8 +14,8 @@ const H = 400;
 
 const Y_MIN = 1e-10;
 const Y_MAX = 1e0;
-const GAP_MIN = 0.62;
-const GAP_MAX = 0.7;
+const GAP_MIN = 0.62;  // log2 - beta^2/4 at beta=0.5
+const GAP_MAX = 0.7;  // near log 2
 
 export function RGFlowChart() {
   const { step, beta, gap } = phase3.trajectory;
@@ -38,7 +38,7 @@ export function RGFlowChart() {
           role="img"
           aria-label={`Renormalization group trajectory over five blocking steps. The coupling beta falls on a log scale from 0.5 to ${sci(
             beta[beta.length - 1],
-          )}, while the mass gap on the right axis rises from 0.6306 to log 2 equals 0.693147, shown as a dashed asymptote.`}
+          )}, while the mass gap on the right axis rises toward log 2 = 0.693147 (cited asymptote, not a derived gap), shown as a dashed asymptote.`}
           viewBox={`0 0 ${W} ${H}`}
           className="mx-auto h-auto w-full min-w-[620px]"
         >
@@ -97,7 +97,7 @@ export function RGFlowChart() {
             fontWeight={600}
             fontFamily="ui-monospace, monospace"
           >
-            asymptote Δ = log 2 = 0.69315
+            asymptote Δ = log 2 (cited, not derived) = 0.69315
           </text>
 
           <line

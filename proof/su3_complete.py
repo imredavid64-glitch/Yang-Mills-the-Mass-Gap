@@ -1,4 +1,10 @@
 """
+AUDIT NOTICE (2026-11-27)
+The group theory below (dimensions, Weyl characters, Haar measure,
+orthogonality) is checked numerically.  "Mass gap log 3" is a single-link
+eigenvalue ratio 1/d, not a derived Wilson-action gap; see
+proof/transfer_beta_zero.py for why no finite gap exists at beta = 0.
+
 Phase 4: Complete SU(3) Implementation
 Correct Weyl character formula (determinant form), exact character expansion,
 transfer matrix, Haar measure verification, and orthogonality checks.
